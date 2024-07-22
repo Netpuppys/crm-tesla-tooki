@@ -1,0 +1,78 @@
+.admin-management-main-div{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 27px 56px;
+}
+
+.admin-management-main-div
+.page-title{
+    margin-bottom: 47px;
+    color: #1F384C;
+    text-align: left;
+
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 23px; /* 115% */
+    letter-spacing: 0.5px;
+}
+
+.admin-management-main-div
+.filters-container{
+    width: 100%;
+    margin-bottom: 37px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.admin-management-main-div
+.filters-container
+.sort-btn{
+    padding: 12px 34px;
+
+    border: none;
+    background-color: #E3F0DD;
+
+    border-radius: 50px;
+
+    color: #00A510;
+
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 133.333% */
+    letter-spacing: 0.5px;
+}
+
+.admin-management-main-div
+.filters-container
+.filter-btn{
+    padding: 12px 34px;
+
+    border: none;
+    background-color: #FFE3CF;
+
+    border-radius: 50px;
+
+    color: #FF5C00;
+
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 133.333% */
+    letter-spacing: 0.5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.admin-management-main-div
+.filters-container
+.create-admin-btn{
+    margin-left: auto;
+}

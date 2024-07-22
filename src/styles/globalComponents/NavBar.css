@@ -1,0 +1,115 @@
+.navbar-main-div{
+    width: 82vw;
+    /* margin-left: 18vw; */
+    height: 120px;
+    box-sizing: border-box;
+    padding-top: 34px;
+    padding-inline: 48px;
+
+    border-bottom: 1px solid #C8CBD9;
+    background-color: #fff;
+    z-index: 999;
+
+    position: fixed;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.navbar-main-div
+.searchbar-div{
+    width: 100%;
+    max-width: 749.846px;
+    height: 38.392px;
+    box-sizing: border-box;
+    padding-inline: 18px;
+
+    border-radius: 5px;
+    background: #F4FFEF;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-main-div
+.searchbar-div
+.search-input-navbar{
+    width: calc(100% - 32px);
+    height: 100%;
+
+    background-color: transparent;
+    border: none;
+
+    color: #000;
+
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 13px; /* 108.333% */
+    letter-spacing: 0.5px;
+}
+
+.navbar-main-div
+.searchbar-div
+.search-input-navbar:focus{
+    outline: none;
+}
+
+.navbar-main-div
+.searchbar-div
+.search-icon{
+    cursor: pointer;
+    width: 32px;
+    font-size: 26px;
+}
+
+.navbar-main-div
+.navbar-user-details{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.navbar-main-div
+.navbar-user-details
+.user-profile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.navbar-main-div
+.navbar-user-details
+.user-profile
+.profile-img{
+    max-width: 38.392px;
+    max-height: 38.392px;
+}
+
+.navbar-main-div
+.navbar-user-details
+.user-profile
+.profile-name{
+    color: #1F384C;
+    text-transform: capitalize;
+
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 13px; /* 108.333% */
+    letter-spacing: 0.5px;
+}
+
+.navbar-main-div
+.navbar-user-details
+.navbar-extra-icon{
+    cursor: pointer;
+    font-size: 24px;
+    color: #B0C3CC;
+}

@@ -1,0 +1,32 @@
+.access-tag{
+    width: 83.52px;
+    height: 28.8px;
+
+    border-radius: 26.88px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #FFF;
+    text-transform: capitalize;
+
+    font-size: 11.52px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25.2px; 
+}
+
+.analytics-tag{
+    background-color: #FF7527;
+}
+
+.assign-tag{
+    color: #000 !important;
+    background-color: transparent;
+    border: 1.5px solid #000;
+}
+
+.admin-tag{
+    background-color: #36CC29;
+}

@@ -1,0 +1,442 @@
+.login-page-bg{
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #FF6B17;
+}
+
+.login-page-bg
+.main-content{
+    width: 80%;
+    height: 80%;
+    background-color: #fff;
+    border-radius: 30px;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-page-bg
+.main-content
+.main-logo{
+    width: 200px;
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 10;
+
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+}
+
+.login-main-div{
+    width: 100%;
+    max-width: 30rem;
+    height: 100%;
+    box-sizing: border-box;
+    padding-inline: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-main-div
+.main-title{
+    margin-bottom: 1rem;
+    color: #525252;
+
+    font-size: 2.1825rem;
+    font-weight: 500;
+
+    letter-spacing: 0.5px;
+}
+
+.login-main-div
+.welcome-text{
+    color: #FB944B;
+    margin-bottom: 1rem;
+
+    font-size: 2.1825rem;
+    font-weight: 400;
+
+    letter-spacing: 0.5px;
+}
+
+.login-main-div
+form{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-main-div
+.form-group{
+    margin-bottom: 1.3rem;
+    position: relative;
+    width: 100%;
+    max-width: 25rem;
+    height: 3rem;
+    box-sizing: border-box;
+
+    padding: 0.5rem;
+    padding-left: 2rem;
+    border-radius: 0.625rem;
+
+    background-color: #E6FFE8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-main-div
+.form-group
+.icon-wrap{
+    color: #00C50A;
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+
+    transform: translate(0, -50%);
+
+    font-size: 1.625rem;
+}
+
+.login-main-div
+.form-group
+.form-control{
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    background-color: transparent;
+
+    font-size: 1.375rem;
+}
+
+.login-main-div
+.form-group
+.form-control:focus{
+    outline: none;
+}
+
+.login-main-div
+.form-group
+.show-hide-btn{
+    background-color: transparent;
+    border: none;
+
+    font-size: 1.4rem;
+    color: #00C50A;
+}
+
+.login-main-div
+.bottom-buttons{
+    margin-bottom: 1.5rem;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.login-main-div
+.bottom-buttons
+.checkbox-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-main-div
+.bottom-buttons
+.checkbox-div
+.remember-checkbox{
+    width: 1.7rem;
+    height: 1.7rem;
+
+    background-color: #00C50A;
+}
+
+.login-main-div
+.bottom-buttons
+.checkbox-div
+.remember-text{
+    color: #525252;
+}
+
+.login-main-div
+.bottom-buttons
+.forgot-btn{
+    background-color: transparent;
+    border: none;
+
+    color: #525252;
+    cursor: pointer;
+}
+
+.login-main-div
+.main-login-btn{
+    cursor: pointer;
+    margin-bottom: 1rem;
+    width: 100%;
+    height: 3rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 0.625rem;
+    background: linear-gradient(135deg, #FB331A 4.08%, #F76C2E 99.07%), #FFA15B;
+    border: none;
+    border-radius: 1rem;
+
+    font-size: 1.6rem;
+    color: #fff
+}
+
+.login-main-div
+.create-new-btn{
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+
+    color: #FFA15B;
+
+    text-align: center;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.4375rem;
+}
+
+@media (max-width: 1100px) {
+    .login-main-div{
+        width: 100%;
+        height: 100vh;
+        box-sizing: border-box;
+        padding-inline: 0rem;
+        padding-top: 5.25rem;
+        padding-bottom: 4.12rem;
+        /* overflow: hidden; */
+    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .login-main-div
+    .top-image-container{
+        width: 100%;
+    }
+
+    .login-main-div
+    .top-image-container
+    .login-hero-image{
+        margin-top: 2rem;
+        width: 80%;
+        height: 80%;
+    }
+    
+    .login-main-div
+    .main-title{
+        margin-bottom: 3rem;
+        color: #525252;
+    
+        font-size: 2.1825rem;
+        font-weight: 500;
+    
+        letter-spacing: 0.5px;
+    }
+    
+    .login-main-div
+    .welcome-text{
+        color: #FF6B17;
+        margin-bottom: 0.6rem;
+    
+        text-align: center;
+        font-size: 1.875rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1.4375rem; /* 76.667% */
+        letter-spacing: 0.03125rem;
+    }
+
+    .login-main-div
+    .form-title{
+        margin-bottom: 1.5rem;
+        color: #818181;
+
+        text-align: center;
+        font-size: 1.125rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.4375rem; 
+    }
+    
+    .login-main-div
+    form{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 1.5rem 1.25rem;
+        border-radius: 1.1875rem;
+        background: #FFF;
+        box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.25);
+    }
+    
+    .login-main-div
+    .form-group{
+        margin-bottom: 2rem;
+        position: relative;
+        width: 100%;
+        max-width: 20rem;
+        height: 3.125rem;
+        box-sizing: border-box;
+    
+        padding: 0.5rem;
+        padding-left: 2rem;
+        border-radius: 0.625rem;
+    
+        background-color: #E6FFE8;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .login-main-div
+    .form-group
+    .icon-wrap{
+        color: #00C50A;
+        position: absolute;
+        top: 50%;
+        left: 0.5rem;
+    
+        transform: translate(0, -50%);
+    
+        font-size: 1.625rem;
+    }
+    
+    .login-main-div
+    .form-group
+    .form-control{
+        width: 100%;
+        height: 100%;
+    
+        border: none;
+        background-color: transparent;
+    
+        font-size: 1.375rem;
+    }
+    
+    .login-main-div
+    .form-group
+    .form-control:focus{
+        outline: none;
+    }
+    
+    .login-main-div
+    .form-group
+    .show-hide-btn{
+        background-color: transparent;
+        border: none;
+    
+        font-size: 1.4rem;
+        color: #00C50A;
+    }
+    
+    .login-main-div
+    .bottom-buttons{
+        margin-bottom: 1.5rem;
+        width: 100%;
+    
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .login-main-div
+    .bottom-buttons
+    .checkbox-div{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .login-main-div
+    .bottom-buttons
+    .checkbox-div
+    .remember-checkbox{
+        width: 1.7rem;
+        height: 1.7rem;
+    
+        background-color: #00C50A;
+    }
+    
+    .login-main-div
+    .bottom-buttons
+    .checkbox-div
+    .remember-text{
+        color: #525252;
+    }
+    
+    .login-main-div
+    .bottom-buttons
+    .forgot-btn{
+        background-color: transparent;
+        border: none;
+    
+        color: #525252;
+        cursor: pointer;
+    }
+    
+    .login-main-div
+    .main-login-btn{
+        cursor: pointer;
+        margin-bottom: 1rem;
+        width: 100%;
+        height: 3rem;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    
+        border-radius: 0.625rem;
+        background: linear-gradient(135deg, #FB331A 4.08%, #F76C2E 99.07%), #FFA15B;
+        border: none;
+        border-radius: 1rem;
+    
+        font-size: 1.6rem;
+        color: #fff
+    }
+    
+    .login-main-div
+    .create-new-btn{
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+    
+        color: #FFA15B;
+    
+        text-align: center;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.4375rem;
+    }
+}

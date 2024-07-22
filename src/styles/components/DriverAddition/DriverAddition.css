@@ -1,0 +1,248 @@
+.driver-add-main-div{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 27px 56px;
+    /* max-width: 1160px; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+.driver-add-main-div
+.close-btn{
+    position: absolute;
+    right: 56px;
+    top: 95px;
+
+    cursor: pointer;
+
+    width: 128px;
+    height: 38px;
+
+    box-sizing: border-box;
+    background-color: transparent;
+
+    border-radius: 23px;
+    border: 1.5px solid #FFB27C;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 23px;
+
+    color: #FF5C00;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 550;
+    line-height: 143.8%;
+}
+
+.driver-add-main-div
+.close-btn:hover{
+    background-color: #FF5C00;
+
+    color: #fff;
+}
+
+.driver-add-main-div
+.page-title{
+    margin-bottom: 54px;
+    color: #1F384C;
+
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 23px; /* 115% */
+    letter-spacing: 0.5px;
+}
+
+.driver-add-main-div
+.sub-title{
+    margin-bottom: 45px;
+    color: #3B5061;
+
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 23px; /* 127.778% */
+    letter-spacing: 0.5px;
+}
+
+.driver-add-main-div
+.driver-add-inputs-container{
+    width: 100%;
+    margin-bottom: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.driver-add-main-div
+.driver-add-inputs-container
+.new-community-form{
+    width: 100%;
+    max-width: 720px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 46px;
+    row-gap: 14px;
+}
+
+.driver-add-main-div
+.community-input{
+    box-sizing: border-box;
+    width: calc(50% - 25px);
+    /* min-width: 300px; */
+    height: 46px;
+    padding-inline: 0.9rem;
+
+    border-radius: 23px;
+    border: 1.5px solid #FFB27C;
+    /* box-shadow: 3px 3px 7px 0px rgba(0, 0, 0, 0.30) inset; */
+
+    color: #FF5C00;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 550;
+    line-height: 143.8%; /* 1.25825rem */
+}
+
+.driver-add-main-div
+.driver-add-inputs-container
+.email-input{
+    width: 100%;
+}
+
+.driver-add-main-div
+.community-input::placeholder{
+    color: #FF5C00;
+}
+
+.driver-add-main-div
+.community-input:focus{
+    color: #FF5C00;
+    outline: none;
+}
+
+.driver-add-main-div
+.driver-add-inputs-container
+.or-divider{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.driver-add-main-div
+.driver-add-inputs-container
+.or-divider
+.divider{
+    width: 46px;
+    height: 2px;
+    background-color: #FFB27C;
+    content: "";
+}
+
+.driver-add-main-div
+.driver-add-inputs-container
+.or-divider
+.or-text{
+    color: #FF5C00;
+
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 166.667% */
+    letter-spacing: 0.5px;
+}
+
+
+.driver-add-main-div
+.driver-add-inputs-container
+.take-photo-div{
+    width: 300px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    border: 1.5px solid #FF5C00;
+    background-color: #ffdbc1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 100px;
+    color: #FF5C00;
+}
+
+.file-input-group{
+    flex-direction: column;
+    height: fit-content;
+    position: relative;
+}
+
+.driver-add-main-div
+.file-input-group
+.form-control{
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+
+.driver-add-main-div
+.file-input-group
+.label-file-input{
+    width: 100%;
+    text-align: left;
+    color: #FF5C00;
+
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.4375rem;
+}
+
+.driver-add-main-div
+.file-input-group
+.upload-icon{
+    margin-top: 10px;
+    font-size: 70px;
+    color: #FF5C00;
+
+    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.driver-add-main-div
+.file-input-group
+.upload-icon
+.upload-text{
+    font-size: 1rem;
+}
+
+.driver-add-main-div
+.file-input{
+    height: 150px;
+    padding-top: 10px;
+    box-sizing: border-box;
+
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}

@@ -1,0 +1,71 @@
+.App {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.App 
+p{
+  margin: 0;
+}
+
+.main-app-container{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main-app-container
+.sidebar-app-container{
+  width: 18%;
+  height: 100%;
+
+  overflow: auto;
+}
+
+.main-app-container
+.sidebar-app-container::-webkit-scrollbar{
+  display: none;
+}
+
+.main-app-container
+.main-app-left{
+  width: 82%;
+  height: 100%;
+
+  /* padding-top: 120px; */
+  /* position: relative; */
+  overflow: auto;
+}
+
+.main-app-container
+.main-app-left::-webkit-scrollbar{
+  display: none;
+}
+
+/* .main-app-container
+.main-app-left
+.navbar-app-container{
+  width: 100%;
+  height: 120px;
+
+  position: fixed;
+} */
+
+.main-app-container
+.main-app-left
+.main-app-pages{
+  width: 100%;
+  height: calc(100% - 121px);
+
+  padding-top: 120px;
+  overflow: auto;
+}
+
+.main-app-container
+.main-app-left
+.main-app-pages::-webkit-scrollbar{
+  display: none;
+}

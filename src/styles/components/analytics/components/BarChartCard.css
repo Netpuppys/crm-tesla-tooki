@@ -1,0 +1,142 @@
+.bar-chart-card-main-div{
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+}
+
+.bar-chart-card-main-div
+.report-btn{
+    cursor: pointer;
+    width: 130.773px;
+    height: 38.392px;
+
+    position: absolute;
+    top: 16px;
+    right: 24px;
+
+    border-radius: 5px;
+
+    background-color: #EBFFE1;
+    border: 0.5px solid #e3f0dd;
+    filter: drop-shadow(0px 2px 1px rgba(64, 72, 82, 0.05));
+
+    color: #00A510;
+
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+}
+
+.bar-chart-card-main-div
+.all-text-div{
+    text-align: left;
+}
+
+.bar-chart-card-main-div
+.all-text-div
+.main-title{
+    margin-bottom: 9.6px;
+    color: #000;
+
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.5px;
+}
+
+.bar-chart-card-main-div
+.all-text-div
+.card-sub-title{
+    color: #000;
+    margin-bottom: 12px;
+
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px; /* 140% */
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.bar-chart-card-main-div
+.all-text-div
+.percentage-text{
+    margin-bottom: 28px;
+    color: #149D52;
+
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 12px; /* 100% */
+    letter-spacing: 0.5px;
+}
+
+.bar-chart-card-main-div
+.all-text-div
+.time-period-text{
+    color: #000;
+
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px; /* 161.538% */
+    letter-spacing: 0.5px;
+}
+
+.bar-chart-card-main-div
+.all-text-div
+.percentage-text
+span{
+    color: #737B8B;
+}
+
+.bar-chart-card-main-div
+.chart-container{
+    width: 100%;
+    margin-top: 30px;
+}
+
+.bar-chart-card-main-div
+.chart-indicators{
+    margin-top: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 32px;
+}
+
+.bar-chart-card-main-div
+.chart-indicators
+.indicator-div{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9.6px;
+}
+
+.bar-chart-card-main-div
+.chart-indicators
+.indicator-div
+.indicator{
+    width: 10.7px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    content: "";
+}
+
+.bar-chart-card-main-div
+.chart-indicators
+.indicator-div
+.indicator-label{
+    color: #121212;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px; /* 100% */
+    letter-spacing: 0.5px;
+}
