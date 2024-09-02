@@ -45,15 +45,15 @@ const BarChartCard = ({ data }) => {
             <p className='main-title'>
                 Number of Rides Booked
             </p>
-            <p className='card-sub-title'>
+            {/* <p className='card-sub-title'>
                 Lorem ipsum
-            </p>
+            </p> */}
             <p className='percentage-text'>
-                <FaArrowUp /> 2.1% <span>vs last week</span>
+                <FaArrowUp /> 0% <span>vs last week</span>
             </p>
 
             <p className='time-period-text'>
-                Rides from 1-29 Feb, 2024
+                Rides from 1-29 Aug, 2024
             </p>
         </div>
 

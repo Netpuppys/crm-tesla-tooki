@@ -46,7 +46,7 @@ const LineChartCard = ({ data }) => {
                 {totalOrders}
             </p>
             <p className='percentage-text'>
-                <FaArrowUp /> 2.1% <span>vs last week</span>
+                <FaArrowUp /> 0% <span>vs last week</span>
             </p>
 
             <p className='time-period-text'>

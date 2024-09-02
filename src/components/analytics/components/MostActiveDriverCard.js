@@ -28,7 +28,7 @@ const MostActiveDriverCard = ({ serverData }) => {
             </p>
 
             <p className='percentage-text'>
-                <span>Lorem ipsum dolor sit amet, consectetur</span>
+                {/* <span>Lorem ipsum dolor sit amet, consectetur</span> */}
             </p>
         </div>
 

@@ -5,17 +5,14 @@ import mainLogo from "../assets/Logos/mainLogo.png"
 import { IoIosMail, IoIosLock, IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axiosInstance from 'utils/AxiosInstance';
 import "../styles/components/Login/LoginPage.css"
-// import image1 from "../../assets/login/image-1.png"
-// import Background from '../Tutorial/component/Background'
-// import "../../styles/component/login/Login.css"
-// import axiosInstance from '../../utils/axiosInstance';
-// import { useUserContext } from '../../globalComponent/context/UserContext';
+import { ThreeDots } from 'react-loader-spinner';
 
 const Login = ({ setLoggedIn, setUserData}) => {
     const navigate = useNavigate()
     // const { setUserId } = useUserContext()
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [showPassword, setShowPassword] = useState(false)
+    const [ loader, setLoader ] = useState(false)
 
     useEffect(() => {
         sessionStorage.setItem("logged", false)
@@ -24,6 +21,8 @@ const Login = ({ setLoggedIn, setUserData}) => {
     }, [])
 
     const onSubmit = (data) => {
+        setLoader(true)
+
         const loginData = {
             email: data.email,
             password: data.password,
@@ -46,6 +45,9 @@ const Login = ({ setLoggedIn, setUserData}) => {
             .catch(err => {
                 console.log(err)
             })
+            .finally(() => {
+                setLoader(false)
+            })
     };
 
     // const goToSignUp = () => {
@@ -59,10 +61,10 @@ const Login = ({ setLoggedIn, setUserData}) => {
             <img src={mainLogo} className='main-logo' alt='toooki' />
 
             <div className='login-main-div'>
-                    <p className='main-title'>
+                    <p className='main-title supermercado'>
                         Sign In
                     </p>
-                    <p className='welcome-text'>
+                    <p className='welcome-text supermercado'>
                         Welcome!
                     </p>
 
@@ -115,8 +117,8 @@ const Login = ({ setLoggedIn, setUserData}) => {
                             </button>
                         </div>
 
-                        <button type="submit" className="main-login-btn">
-                            Login
+                        <button type="submit" className="main-login-btn supermercado">
+                            {!loader? "Login" : <ThreeDots color='white' />}
                         </button>
                     </form>
 

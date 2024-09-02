@@ -11,7 +11,7 @@ const sideBarItems = [
             { icon: <MdAnalytics />, label: "Analytics", link: "/analytics" },
             { icon: <MdAnalytics />, label: "Admin management", link: "/admin-management" },
             { icon: <MdAnalytics />, label: "communities", link: "/communities" },
-            { icon: <MdAnalytics />, label: "Customer Requests", link: "/" },
+            // { icon: <MdAnalytics />, label: "Customer Requests", link: "/" },
             { icon: <MdAnalytics />, label: "Franchise Addition", link: "/franchise-addition" },
             { icon: <MdAnalytics />, label: "Drivers Addition", link: "/driver-addition" },
         ]
@@ -21,7 +21,7 @@ const sideBarItems = [
         items: [
             { icon: <MdAnalytics />, label: "feedback", link: "/feedback" },
             { icon: <MdAnalytics />, label: "contact us", link: "/contact-us" },
-            { icon: <MdAnalytics />, label: "help", link: "/" },
+            // { icon: <MdAnalytics />, label: "help", link: "/" },
         ]
     },
 ]
