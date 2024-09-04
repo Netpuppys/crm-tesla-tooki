@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
-import mainLogo from "../assets/Logos/mainLogo.png"
+import mainLogo from "../assets/Logos/mainLogo.png";
 import { IoIosMail, IoIosLock, IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axiosInstance from 'utils/AxiosInstance';
-import "../styles/components/Login/LoginPage.css"
+import "../styles/components/Login/LoginPage.css";
 import { ThreeDots } from 'react-loader-spinner';
 
 const Login = ({ setLoggedIn, setUserData}) => {
