@@ -54,8 +54,34 @@ const DriverAddition = () => {
     };
 
     const handleSubmit = () => {
-        const formData = new FormData();
+        // Basic validation
+        if (!newAdmin.firstName || !newAdmin.lastName || !newAdmin.email || !newAdmin.mobile || !newAdmin.password || !newAdmin.dL || !newAdmin.aadhar || !newAdmin.area) {
+            setAlert('All fields are required!');
+            return;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(newAdmin.email)) {
+            setAlert('Invalid email format!');
+            return;
+        }
     
+        // Mobile number validation (e.g., 10 digits)
+        const mobileRegex = /^\d{10}$/;
+        if (!mobileRegex.test(newAdmin.mobile)) {
+            setAlert('Invalid mobile number! Must be 10 digits.');
+            return;
+        }
+    
+        // Ensure file is uploaded
+        if (!fileUploaded) {
+            setAlert('Please upload the police verification letter!');
+            return;
+        }
+    
+        const formData = new FormData();
+        
         // Append fields from data
         formData.append('first_name', newAdmin.firstName);
         formData.append('last_name', newAdmin.lastName);
@@ -64,10 +90,11 @@ const DriverAddition = () => {
         formData.append('user_type', "driver");
         formData.append('phone_number', newAdmin.mobile);
         formData.append('password', newAdmin.password);
+        formData.append('area', newAdmin.area);
         formData.append('license_no', newAdmin.dL);
         formData.append('aadhaar_no', newAdmin.aadhar);
         formData.append('police_verification_letter', fileUploaded);
-    
+        
         axiosInstance
             .post("all/adddata/", formData, {
                 headers: {
@@ -76,15 +103,15 @@ const DriverAddition = () => {
             })
             .then(res => {
                 console.log(res);
-                alert("Driver Created")
+                setAlert("Driver Created");
             })
             .catch(err => {
                 console.log(err);
-                alert(err.message)
+                setAlert(err.response.data.message);
             });
-
-            return
-    }
+    
+        return;
+    };
 
     return (
         <div className='driver-add-main-div'>
