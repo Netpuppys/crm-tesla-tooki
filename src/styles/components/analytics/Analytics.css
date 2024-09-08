@@ -1,6 +1,6 @@
 .analytics-main-div{
     width: 100%;
-    min-height: calc(100vh - 121px);
+    min-height: calc(100vh);
 
     box-sizing: border-box;
     padding: 36px 56px;

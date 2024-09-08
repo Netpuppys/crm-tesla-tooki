@@ -48,7 +48,7 @@ const BarChartCard = ({ data }) => {
             {/* <p className='card-sub-title'>
                 Lorem ipsum
             </p> */}
-            <p className='percentage-text'>
+            <p className='percentage-text flex'>
                 <FaArrowUp /> 0% <span>vs last week</span>
             </p>
 

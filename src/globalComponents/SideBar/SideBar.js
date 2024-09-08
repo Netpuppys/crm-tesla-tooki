@@ -9,7 +9,10 @@ const sideBarItems = [
         label: "menu",
         items: [
             { icon: <MdAnalytics />, label: "Analytics", link: "/analytics" },
-            { icon: <MdAnalytics />, label: "Admin management", link: "/admin-management" },
+            // { icon: <MdAnalytics />, label: "Admin management", link: "/admin-management" },
+            { icon: <MdAnalytics />, label: "Franchise List", link: "/franchise-list" },
+            { icon: <MdAnalytics />, label: "Driver List", link: "/driver-list" },
+            { icon: <MdAnalytics />, label: "User List", link: "/user-list" },
             { icon: <MdAnalytics />, label: "communities", link: "/communities" },
             // { icon: <MdAnalytics />, label: "Customer Requests", link: "/" },
             { icon: <MdAnalytics />, label: "Franchise Addition", link: "/franchise-addition" },

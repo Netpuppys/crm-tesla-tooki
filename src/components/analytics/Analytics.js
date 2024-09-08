@@ -32,7 +32,7 @@ const Analytics = () => {
     // console.log(apiData && apiData['location-service'])
 
   return (
-    <div className='analytics-main-div'>
+    <div className='analytics-main-div min-h-screen'>
         <div className='filter-div'>
             <button className='filter-btn'>
                 By ID

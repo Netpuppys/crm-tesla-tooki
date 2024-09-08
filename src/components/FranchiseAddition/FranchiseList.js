@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
-import DriverAddition from 'components/DriverAddition/DriverAddition'
-import UserTable from 'components/AdminManagement/components/UserTable'
 import { Link } from 'react-router-dom'
 import DriverList from 'components/FranchiseAddition/DriverTable'
 import { useUserContext } from 'globalComponents/AppContext'
+import FranchiseTable from './FranchisesTable'
 
-const DriverAdditionPage = () => {
-  const { driverList } = useUserContext()
+const FranchiseList = () => {
+  const { franchiseList } = useUserContext()
 
   
   return (
     <div className='w-full text-left px-14 pt-5'>
         <p className='text-xl font-medium text-[#1F384C]'>
-          All Drivers
+          All Franchises
         </p>
 
         <div className='w-full mt-10 h-10 flex items-center justify-between'>
@@ -23,18 +22,18 @@ const DriverAdditionPage = () => {
           </button>
 
           <Link
-            to={"/driver-addition"}
+            to={"/franchise-addition"}
             className='px-16 rounded-full h-full flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF]'
           >
-            Add New Driver +
+            Add New Franchise +
           </Link>
         </div>
         <div className='w-full mt-5'>
-          {driverList &&
-          <DriverList driverList={driverList} />}
+          {franchiseList &&
+          <FranchiseTable driverList={franchiseList} />}
         </div>
     </div>
   )
 }
 
-export default DriverAdditionPage
+export default FranchiseList

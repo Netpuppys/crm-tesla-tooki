@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import mainLogo from "../assets/Logos/mainLogo.png";
 import { IoIosMail, IoIosLock, IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axiosInstance from 'utils/AxiosInstance';
-import "../styles/components/Login/LoginPage.css";
 import { ThreeDots } from 'react-loader-spinner';
+import "../styles/components/Login/LoginPage.css";
 
 const Login = ({ setLoggedIn, setUserData}) => {
     const navigate = useNavigate()
@@ -37,7 +37,7 @@ const Login = ({ setLoggedIn, setUserData}) => {
                 localStorage.setItem("access", res.data.data.access)
                 localStorage.setItem("refresh", res.data.data.refresh)
                 sessionStorage.setItem("logged", true)
-                sessionStorage.setItem("userData", response.user)
+                sessionStorage.setItem("userData", JSON.stringify(response.user))
                 // setUserId(response.user.id)
                 setLoggedIn(true)
                 navigate("/analytics")

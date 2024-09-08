@@ -9,6 +9,12 @@ import "../../styles/components/DriverAddition/DriverAddition.css"
 import axiosInstance from 'utils/AxiosInstance';
 import { FaCamera } from 'react-icons/fa';
 
+const majorCities = [
+    "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad",
+    "Chennai", "Kolkata", "Pune", "Jaipur", "Surat",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane"
+];
+
 const DriverAddition = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -40,12 +46,14 @@ const DriverAddition = () => {
         }));
     };
 
-    const handleSubmit = () => {
-      if (newAdmin.password !== newAdmin.confirmPass) {
-        alert("passwords don't match!")
-        return
-      }
+    const handleCityChange = (event) => {
+        setNewAdmin(prev => ({
+            ...prev,
+            area: event.target.value,
+        }));
+    };
 
+    const handleSubmit = () => {
         const formData = new FormData();
     
         // Append fields from data
@@ -61,7 +69,7 @@ const DriverAddition = () => {
         formData.append('police_verification_letter', fileUploaded);
     
         axiosInstance
-            .post("/register", formData, {
+            .post("all/adddata/", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -80,15 +88,15 @@ const DriverAddition = () => {
 
     return (
         <div className='driver-add-main-div'>
-            <p className='page-title'>Admin Management</p>
-            <p className='sub-title'>Create New Admin</p>
+            <p className='page-title'>Driver Addition</p>
+            <p className='sub-title'>Add New Driver</p>
 
-            <button 
-                onClick={() => navigate("/admin-management")} 
+            {/* <button 
+                onClick={() => navigate("/driver-addition")} 
                 className='close-btn'
             >
                 Close <IoClose />
-            </button>
+            </button> */}
 
             <div className='driver-add-inputs-container'>
                 <div className='new-community-form'>
@@ -135,13 +143,6 @@ const DriverAddition = () => {
                         onChange={e => handleInputChange(e.target.value, "password")}
                     />
                     <input
-                        type='text'
-                        placeholder='confirm Password'
-                        className='community-input email-input'
-                        value={newAdmin.conPassword}
-                        onChange={e => handleInputChange(e.target.value, "confirmPass")}
-                    />
-                    <input
                         type='number'
                         placeholder='Driving License No.'
                         className='community-input email-input'
@@ -155,6 +156,16 @@ const DriverAddition = () => {
                         value={newAdmin.aadhar}
                         onChange={e => handleInputChange(e.target.value, "aadhar")}
                     />
+                    <select
+                        value={newAdmin.area}
+                        onChange={handleCityChange}
+                        className='community-input email-input'
+                    >
+                        <option value="" disabled>Select Area</option>
+                        {majorCities.map(city => (
+                            <option key={city} value={city}>{city}</option>
+                        ))}
+                    </select>
                     {/* <input
                         type='file'
                         placeholder='Mobile Number'
@@ -189,15 +200,14 @@ const DriverAddition = () => {
                     </div>
                 </div>
 
-                <div className='or-divider'>
+                {/* <div className='or-divider'>
                     <div className='divider'></div>
-                    <p className='or-text'>OR</p>
                     <div className='divider'></div>
                 </div>
 
                 <div className='take-photo-div'>
                   <FaCamera />
-                </div>
+                </div> */}
             </div>
 
             <RedButton text={"Submit"} onClickHandler={handleSubmit}/>

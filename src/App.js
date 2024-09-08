@@ -13,11 +13,14 @@ import DriverAdditionPage from 'pages/DriverAdditionPage';
 import LoginPage from 'pages/LoginPage';
 import { UserProvider } from 'globalComponents/AppContext';
 import FranchiseAdditionPage from 'pages/FranchiseAdditionPage';
+import DriverAddition from 'components/DriverAddition/DriverAddition';
+import FranchiseList from 'components/FranchiseAddition/FranchiseList';
+import UserListPage from 'components/User/UserListPage';
 
 function App() {
   // const loggedIn = sessionStorage.getItem("logged")
   const [ loggedIn, setLoggedIn ] = useState(sessionStorage.getItem("logged")) 
-  const [ userData, setUserData ] = useState(sessionStorage.getItem("userData"))
+  const [ userData, setUserData ] = useState(JSON.parse(sessionStorage.getItem("userData")))
 
   // useEffect(() => {
   //   const dummyUserLogin = {
@@ -68,7 +71,10 @@ function App() {
                   <Route path='/contact-us' element={<ContactUsPage />} />
                   <Route path='/feedback' element={<FeedBackPage />} />
                   <Route path='/analytics' element={<AnalyticsPage />} /> 
-                  <Route path='/Driver-addition' element={<DriverAdditionPage />} /> 
+                  <Route path='/Driver-addition' element={<DriverAddition />} /> 
+                  <Route path='/driver-list' element={<DriverAdditionPage />} /> 
+                  <Route path='/franchise-list' element={<FranchiseList />} /> 
+                  <Route path='/user-list' element={<UserListPage />} /> 
                   <Route path='/admin-management' element={<AdminManagementPage />} /> 
                   <Route path='/admin-management/create' element={<CreateNewAdmin />} /> 
                   <Route path='/communities' element={<CommunitiesPage />} /> 
