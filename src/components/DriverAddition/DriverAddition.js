@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { IoClose } from "react-icons/io5";
 import { MdCloudUpload } from "react-icons/md";
 import { IoCloudDoneOutline } from "react-icons/io5";
@@ -16,7 +16,6 @@ const majorCities = [
 ];
 
 const DriverAddition = () => {
-    const navigate = useNavigate()
     const location = useLocation()
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
     const [ userList , setUserList ] = useState()
@@ -117,13 +116,6 @@ const DriverAddition = () => {
         <div className='driver-add-main-div'>
             <p className='page-title'>Driver Addition</p>
             <p className='sub-title'>Add New Driver</p>
-
-            {/* <button 
-                onClick={() => navigate("/driver-addition")} 
-                className='close-btn'
-            >
-                Close <IoClose />
-            </button> */}
 
             <div className='driver-add-inputs-container'>
                 <div className='new-community-form'>

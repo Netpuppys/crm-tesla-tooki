@@ -47,7 +47,7 @@ const FranchiseTable = ({ driverList, area}) => {
   return (
     <div className="w-full px-4 py-6">
       <div className="mb-4">
-        <h2 className="text-2xl font-semibold text-gray-800">Driver List</h2>
+        <h2 className="text-2xl font-semibold text-gray-800">Franchise List</h2>
       </div>
 
       {showTransactions &&
