@@ -20,30 +20,22 @@ const TransactionHistory = ({ setShowTransactions }) => {
   )
 }
 
-const BalancePopUp = ({ id }) => {
-  const [ balance, setBalance ] = useState()
+const BalancePopUp = ({ balance, setShowBalance }) => {
 
-    useEffect(() => {
-      axiosInstance
-      .get(`wallet/amountcheck/${id}/`)
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    }, [])
+    const handleClose = () => {
+      setShowBalance(false)
+    }
 
   return (
     <div className='w-full bg-white z-50 max-w-[30rem] min-h-[20rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
       <button
-        // onClick={}
+        onClick={handleClose}
         className='w-10 aspect-square absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20 text-black'
       >
         <IoClose />
       </button>
       <p className='text-3xl supermercado'>
-        No Transactions Found
+        Balance: {balance}
       </p>
     </div>
   )
@@ -80,6 +72,9 @@ const DriverList = ({ driverList, area}) => {
   const [ showTransactions, setShowTransactions ] = useState(false)
   const [ showTripHistory, setShowTripHistory ] = useState(false)
   const [ tripHistory, setTripHistory ] = useState()
+  const [ showBalance, setShowBalance ] = useState(false)
+  const [ balanceId, setBalanceId ] = useState()
+  const [ balance, setBalance ] = useState()
 
   const fetchTripHistory = (id) => {
     console.log("hello")
@@ -110,11 +105,34 @@ const DriverList = ({ driverList, area}) => {
     )
   }, [driverList, area])
 
+  const handleShowBalance = (id) => {
+    console.log(id)
+    axiosInstance
+      .get(`wallet/amountcheck/${id}/`)
+      .then(res => {
+        setBalance(res.data.Wallet.balance)
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    setShowBalance(true)
+  }
+
   return (
     <div className="w-full px-4 py-6 relative">
       <div className="mb-4">
         <h2 className="text-2xl font-semibold text-gray-800">Driver List</h2>
       </div>
+
+      {showBalance &&
+      <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
+        <BalancePopUp
+          id={balanceId}
+          balance={balance}
+          setShowBalance={setShowBalance}
+        />
+      </div>}
 
       {showTransactions &&
       <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
@@ -208,6 +226,7 @@ const DriverList = ({ driverList, area}) => {
                 <td className="px-2 pr-4 py-4 text-orange-600 text-right">
                   {/* <a href={`mailto:${driver.email}`} className="hover:underline">{driver.email}</a> */}
                   <button
+                    onClick={() => handleShowBalance(driver.id)}
                     className='underline text-right'
                   >
                     view
