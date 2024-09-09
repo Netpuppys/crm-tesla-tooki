@@ -8,6 +8,7 @@ import RedButton from 'globalComponents/ui/RedButton';
 import "../../styles/components/DriverAddition/DriverAddition.css"
 import axiosInstance from 'utils/AxiosInstance';
 import { FaCamera } from 'react-icons/fa';
+import { useUserContext } from 'globalComponents/AppContext';
 
 const majorCities = [
     "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad",
@@ -16,6 +17,7 @@ const majorCities = [
 ];
 
 const DriverAddition = () => {
+    const { setAlert } = useUserContext()
     const location = useLocation()
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
     const [ userList , setUserList ] = useState()
