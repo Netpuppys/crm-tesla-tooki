@@ -136,7 +136,8 @@ const FranchiseAddition = () => {
                 .post("all/adddata/", formData)
                 .then(res => {
                     console.log(res)
-                    setNewFranchiseData(initialFormState)
+                    // setNewFranchiseData(initialFormState)
+                    alert("Added Successfully")
                 })
                 .catch(err => console.log(err))
         }
