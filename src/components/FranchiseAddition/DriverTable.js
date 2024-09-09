@@ -20,25 +20,34 @@ const TransactionHistory = ({ setShowTransactions }) => {
   )
 }
 
-// : 
-// Fare
-// : 
-// "449.0000"
-// driver
-// : 
-// 8
-// drop_location
-// : 
-// "Rohini Sector 13, Sector 13, Rohini, Delhi, 110085, India"
-// id
-// : 
-// 3
-// pickup_location
-// : 
-// "Badshahpur Sohna Rd Hwy, Sector 48, Gurugram, Haryana 122018, India"
-// rider_name
-// : 
-// "shourya"
+const BalancePopUp = ({ id }) => {
+  const [ balance, setBalance ] = useState()
+
+    useEffect(() => {
+      axiosInstance
+      .get(`wallet/amountcheck/${id}/`)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }, [])
+
+  return (
+    <div className='w-full bg-white z-50 max-w-[30rem] min-h-[20rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
+      <button
+        // onClick={}
+        className='w-10 aspect-square absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20 text-black'
+      >
+        <IoClose />
+      </button>
+      <p className='text-3xl supermercado'>
+        No Transactions Found
+      </p>
+    </div>
+  )
+}
 
 const TripHistory = ({ data }) => {
   return (
@@ -140,9 +149,9 @@ const DriverList = ({ driverList, area}) => {
             <tr className="bg-transparent border-[0.5px] border-[#FF7527] h-14 mb-14">
               <th className="text-left text-[#1F384C] text-sm px-4 pl-10 py-4">Name</th>
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Mobile Number</th>
-              <th className="text-center text-[#1F384C] text-sm px-4 py-4">Email</th>
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Trip History</th>
               <th className="text-center text-[#1F384C] text-sm px-4 pr-10 py-4">Transactions</th>
+              <th className="text-center text-[#1F384C] text-sm px-4 py-4">Balance</th>
             </tr>
             <div className="h-12"></div>
           </thead>
@@ -166,9 +175,6 @@ const DriverList = ({ driverList, area}) => {
                   </div>
                 </td>
                 <td className="px-4 py-4 text-orange-600">{driver.phone_number}</td>
-                <td className="px-4 py-4 text-orange-600">
-                  <a href={`mailto:${driver.email}`} className="hover:underline">{driver.email}</a>
-                </td>
                 <td className="px-4 py-4">
                   <button 
                     onClick={() => fetchTripHistory(driver.id)}
@@ -197,6 +203,14 @@ const DriverList = ({ driverList, area}) => {
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
+                  </button>
+                </td>
+                <td className="px-2 pr-4 py-4 text-orange-600 text-right">
+                  {/* <a href={`mailto:${driver.email}`} className="hover:underline">{driver.email}</a> */}
+                  <button
+                    className='underline text-right'
+                  >
+                    view
                   </button>
                 </td>
               </tr>

@@ -26,7 +26,7 @@ const Login = ({ setLoggedIn, setUserData}) => {
         const loginData = {
             email: data.email,
             password: data.password,
-            login_type: "consumer"
+            login_type: "admin"
         }
         axiosInstance
             .post("/login", loginData)
