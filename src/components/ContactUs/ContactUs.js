@@ -13,8 +13,9 @@ const ContactUs = ({
   handleSubmit,
   submitLoader
 }) => {
-    const email = "netpuppys@gmail.com"
-    const phoneNumber = "+91 7678631922"
+    const email = "office@sheevoot.com"
+    const phoneNumber = "+1(347)9949264"
+    const secPhoneNumber = "9380726785"
     
     const handleNameChange = (value) => {
     setUserName(value);
@@ -40,7 +41,8 @@ const ContactUs = ({
         <div className='note'>
             You can contact us at <span>{email}</span>
             {" "}or{" "}
-            <span>{phoneNumber}</span>
+            <span>{phoneNumber}</span>{", "}
+            <span>{secPhoneNumber}</span>
         </div>
 
         {/* <p className='request-call'>

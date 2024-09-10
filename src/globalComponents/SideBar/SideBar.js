@@ -43,7 +43,7 @@ const SideBar = () => {
     }, [location.pathname])
         
   return (
-    <div className='sidebar-main-div'>
+    <div className='sidebar-main-div relative pb-20'>
         <div className='sidebar-logo-container'>
             <img 
                 src={tookiLogo} 

@@ -26,7 +26,7 @@ const NavBar = ({ userData }) => {
                     className='profile-image'
                     alt='user profile'
                 />
-                <p className='profile-name'>
+                <p className='profile-name text-nowrap'>
                     {userData?.first_name + " " + userData?.last_name}
                 </p>
             </div>

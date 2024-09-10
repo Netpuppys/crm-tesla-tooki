@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { Circles, ThreeCircles, ThreeDots } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
@@ -20,23 +21,119 @@ const TransactionHistory = ({ setShowTransactions }) => {
   )
 }
 
-const BalancePopUp = ({ balance, setShowBalance }) => {
+const BalancePopUp = ({ id, balance, setBalance, setShowBalance }) => {
+  const [ value, setValue ] = useState(0)
+  const [ loader, setLoader ] = useState(false)
 
     const handleClose = () => {
       setShowBalance(false)
     }
 
+    const handleAddPoints = () => {
+      if (!value) {
+        alert("please enter valid amount")
+        return
+      }
+
+      if (value) {
+        setLoader(true)
+
+        const data = {
+          user_id: id,
+          points: Number(value)
+        }
+
+        axiosInstance
+        .post("all/addamount/", data)
+        .then(res => {
+          console.log(res)
+          setBalance(res.data.new_balance)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+        .finally(() => {
+          setLoader(false)
+          setValue(0)
+        })
+      }
+    }
+
+    const handleMinusPoints = () => {
+      if (!value) {
+        alert("please enter valid amount")
+        return
+      }
+
+      if (value) {
+        setLoader(true)
+
+        const data = {
+          user_id: id,
+          points: Number(value)
+        }
+
+        axiosInstance
+        .post("all/subtractamount/", data)
+        .then(res => {
+          console.log(res)
+          setBalance(res.data.new_balance)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+        .finally(() => {
+          setLoader(false)
+          setValue(0)
+        })
+      }
+    }
+
   return (
-    <div className='w-full bg-white z-50 max-w-[30rem] min-h-[20rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
+    <div className='w-full bg-white z-50 overflow-hidden max-w-[30rem] p-6 pb-24 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
       <button
         onClick={handleClose}
-        className='w-10 aspect-square absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20 text-black'
+        disabled={loader}
+        className='w-10 aspect-square absolute top-3 disabled:opacity-20 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20 text-black'
       >
         <IoClose />
       </button>
-      <p className='text-3xl supermercado'>
-        Balance: {balance}
+      <p className='text-2xl supermercado'>
+        Balance
       </p>
+      <p className='text-4xl pt-5 text-green-600 supermercado'>
+        {balance}
+      </p>
+
+      <div className='w-full mt-5 h-10 flex items-center justify-between gap-4'>
+        <p className='text-sm text-wrap text-[#525252]'>
+          How many Points would you like to Add or Subtract:
+        </p>
+        <input
+          type='number'
+          disabled={loader}
+          className='border-2 border-[#525252] border-opacity-25 px-2 w-20 h-full rounded-lg'
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+      </div>
+
+      <div className='w-full h-20 z-20 border-t-2 border-[#525252] border-opacity-20 absolute bottom-0 left-0 flex items-center justify-center gap-2 p-3'>
+        <button
+          onClick={handleAddPoints}
+          disabled={loader}
+          className='w-1/2 h-full rounded-2xl flex justify-center items-center bg-green-600 text-white font-medium supermercado text-lg'
+        >
+          {loader? <ThreeDots color='#ffffff'/> : "Add Points"}
+        </button>
+        <button
+          onClick={handleMinusPoints}
+          disabled={loader}
+          className='w-1/2 h-full rounded-2xl flex justify-center items-center bg-red-600 text-white font-medium supermercado text-lg'
+        >
+          {loader? <ThreeDots color='#ffffff'/> : "Subtract Points"}
+        </button>
+      </div>
     </div>
   )
 }
@@ -67,7 +164,6 @@ const TripHistory = ({ data }) => {
 }
 
 const DriverList = ({ driverList, area}) => {
-  console.log(driverList)
   const [ newDriverList, setNewDriverList ] = useState(driverList)
   const [ showTransactions, setShowTransactions ] = useState(false)
   const [ showTripHistory, setShowTripHistory ] = useState(false)
@@ -75,9 +171,10 @@ const DriverList = ({ driverList, area}) => {
   const [ showBalance, setShowBalance ] = useState(false)
   const [ balanceId, setBalanceId ] = useState()
   const [ balance, setBalance ] = useState()
+  const [ loader, setLoader ] = useState(false)
 
   const fetchTripHistory = (id) => {
-    console.log("hello")
+    setLoader(true)
     axiosInstance
     .get(`/all/driver/${id}/historydetails/`)
     .then(res => {
@@ -88,6 +185,9 @@ const DriverList = ({ driverList, area}) => {
     .catch(err => {
       console.log(err)
       alert("Trip History not found")
+    })
+    .finally(() => {
+      setLoader(false)
     })
   }
 
@@ -106,17 +206,23 @@ const DriverList = ({ driverList, area}) => {
   }, [driverList, area])
 
   const handleShowBalance = (id) => {
-    console.log(id)
+    setLoader(true)
     axiosInstance
       .get(`wallet/amountcheck/${id}/`)
       .then(res => {
-        setBalance(res.data.Wallet.balance)
+        if (res.data.Wallet) {
+          setBalance(res.data.Wallet.balance)
+        } else if (res.data.Amount) {
+          setBalance(res.data.Amount.balance)
+        }
+        setShowBalance(true)
+        setBalanceId(id)
         console.log(res)
       })
       .catch(err => {
         console.log(err)
       })
-    setShowBalance(true)
+      .finally(() => setLoader(false))
   }
 
   return (
@@ -125,11 +231,19 @@ const DriverList = ({ driverList, area}) => {
         <h2 className="text-2xl font-semibold text-gray-800">Driver List</h2>
       </div>
 
+      {loader && 
+      <div className='w-screen backdrop-blur-sm h-screen z-[9999] fixed top-0 left-0 flex items-center justify-center pointer-events-auto'>
+        <ThreeCircles
+          color='#ff6b17'
+        />
+      </div>}
+
       {showBalance &&
       <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
         <BalancePopUp
           id={balanceId}
           balance={balance}
+          setBalance={setBalance}
           setShowBalance={setShowBalance}
         />
       </div>}

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import SideBar from './globalComponents/SideBar/SideBar';
 import AnalyticsPage from './pages/AnalyticsPage';
 import NavBar from './globalComponents/navbar/NavBar';
@@ -17,31 +17,29 @@ import DriverAddition from 'components/DriverAddition/DriverAddition';
 import FranchiseList from 'components/FranchiseAddition/FranchiseList';
 import UserListPage from 'components/User/UserListPage';
 
+const LogOutButton = () => {
+  const navigate = useNavigate()
+
+  const handleLogOut = () => {
+    sessionStorage.clear()
+    localStorage.clear()
+    navigate("/")
+  }
+
+  return(
+    <button
+      onClick={handleLogOut}
+      className='font-light text-orange-600 bg-white rounded-lg px-4 py-1'
+    >
+      Log Out
+    </button>
+  )
+}
+
 function App() {
   // const loggedIn = sessionStorage.getItem("logged")
   const [ loggedIn, setLoggedIn ] = useState(sessionStorage.getItem("logged")) 
   const [ userData, setUserData ] = useState(JSON.parse(sessionStorage.getItem("userData")))
-
-  // useEffect(() => {
-  //   const dummyUserLogin = {
-  //     email: "shawmishra1122@gmail.com",
-  //     password: "smsmsmsm",
-  //     login_type: "consumer"
-  //   }
-
-  //   axiosInstance
-  //     .post("/login", dummyUserLogin)
-  //     .then(res => {
-  //       const response = res.data.data
-  //       setUserData(response.user)
-  //       localStorage.setItem("access", response.access)
-  //       localStorage.setItem("refresh", response.refresh)
-  //       setLoggedIn(true)
-  //     })
-  //     .catch(err => {
-  //       console.error(err)
-  //     })
-  // }, [])
 
   return (
     <div className="App">
@@ -56,8 +54,11 @@ function App() {
 
           {loggedIn &&
           <div className='main-app-container'>
-            <div className='sidebar-app-container'>
+            <div className='sidebar-app-container relative'>
               <SideBar />
+              <div className='w-full h-20 absolute bottom-0 left-0 flex items-center justify-center px-16 bg-white shadow-2xl bg-opacity-10'>
+                <LogOutButton />
+              </div>
             </div>
 
             <div className='main-app-left'>
