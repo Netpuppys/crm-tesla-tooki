@@ -25,38 +25,52 @@ export const UserProvider = ({ children }) => {
     return () => clearTimeout(timer);
   }, [alert]);
 
+  const fetchFranchise = () => {
+    if (logged) {
+      axiosInstance
+      .get("all/show/franchise/")
+      .then(res => {
+          // console.log(res)
+          setFranchiseList(res.data)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    }
+  }
+  
+  const fetchDrivers = () => {
+    if(logged) {
+      axiosInstance
+      .get("all/show/driver/")
+      .then(res => {
+          // console.log(res)
+          setDriverList(res.data)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    }
+  }
+
+  const fetchUsers = () => {
+    if (logged) {
+    axiosInstance
+      .get("all/show/consumer/")
+      .then(res => {
+          // console.log(res)
+          setUserList(res.data)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    }
+  }
+
     useEffect(() => {
-      if(logged) {
-          axiosInstance
-          .get("all/show/driver/")
-          .then(res => {
-              // console.log(res)
-              setDriverList(res.data)
-          })
-          .catch(err => {
-              console.log(err)
-          })
-
-          axiosInstance
-          .get("all/show/franchise/")
-          .then(res => {
-              // console.log(res)
-              setFranchiseList(res.data)
-          })
-          .catch(err => {
-              console.log(err)
-          })
-
-          axiosInstance
-          .get("all/show/consumer/")
-          .then(res => {
-              // console.log(res)
-              setUserList(res.data)
-          })
-          .catch(err => {
-              console.log(err)
-          })
-      }
+      fetchDrivers()
+      fetchFranchise()
+      fetchUsers()
     }, [logged])
 
   useEffect(() => {
@@ -77,10 +91,16 @@ export const UserProvider = ({ children }) => {
         userData,
         setUserData,
         driverList,
+        setDriverList,
         franchiseList,
+        setFranchiseList,
         userList,
+        setUserList,
         alert,
-        setAlert
+        setAlert,
+        fetchDrivers,
+        fetchFranchise,
+        fetchUsers
       }}
     >
       {children}

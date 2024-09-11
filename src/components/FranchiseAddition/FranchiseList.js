@@ -30,7 +30,7 @@ const FranchiseList = () => {
         </div>
         <div className='w-full mt-5'>
           {franchiseList &&
-          <FranchiseTable driverList={franchiseList} />}
+          <FranchiseTable franchiseList={franchiseList} />}
         </div>
     </div>
   )

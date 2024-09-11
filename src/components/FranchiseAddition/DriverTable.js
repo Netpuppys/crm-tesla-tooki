@@ -4,6 +4,7 @@ import { Circles, ThreeCircles, ThreeDots } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import DriverDetails from './components/DriverDetails';
+import { useUserContext } from 'globalComponents/AppContext';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
@@ -140,6 +141,62 @@ const BalancePopUp = ({ id, balance, setBalance, setShowBalance }) => {
   )
 }
 
+const DeletePopUp = ({ deleteId, setDeleteId }) => {
+  const [timer, setTimer] = useState(5);
+  const { setDriverList } = useUserContext()
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval); // Clear the interval on component unmount
+    } else {
+      // Add any action after 5 seconds, like closing the popup
+      console.log("Timer finished, proceeding with action.");
+    }
+  }, [timer]);
+
+  const handleClick = () => {
+    if (typeof deleteId === "number") {
+      axiosInstance
+      .delete(`/all/driver/${deleteId}/`)
+      .then(res => {
+        console.log(res)
+        setTimer(5)
+        setDriverList(prev => {
+          const filterred = prev
+        })
+        setTimeout(() => {
+          setDeleteId(null)
+        }, 5000)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
+  }
+
+  return (
+    <div className='w-fit p-5 text-center backdrop-blur-md bg-orange-500 bg-opacity-15 z-[9999] px-10 rounded-xl shadow-2xl border-2 border-orange-600 flex items-center flex-col justify-center'>
+      <p className='text-3xl supermercado'>
+        Are You Sure? 
+      </p>
+      <p className='text-sm pt-4'>
+        You can delete in: {timer}
+      </p>
+
+      <button
+        disabled={timer!==0}
+        onClick={handleClick}
+        className='w-20 mt-10 h-10 bg-[#ff3333] rounded-full text-white font-medium flex items-center justify-center disabled:bg-gray-500 disabled:opacity-50'
+      >
+        Delete
+      </button>
+    </div>
+  )
+}
+
 const TripHistory = ({ data }) => {
   return (
     <div className='w-full overflow-hidden h-fit py-3 px-4 border-b-2 border-slate-300 bg-white rounded-3xl'>
@@ -176,6 +233,7 @@ const DriverList = ({ driverList, area}) => {
   const [ loader, setLoader ] = useState(false)
   const [ showDetails, setShowDetails ] = useState(false)
   const [ driverDetails, setDriverDetails ] = useState()
+  const [ deleteId, setDeleteId ] = useState(null)
 
   const fetchTripHistory = (id) => {
     setLoader(true)
@@ -269,6 +327,16 @@ const DriverList = ({ driverList, area}) => {
           handleClose={handleCloseDetails}
           driverDetails={driverDetails}
           setDriverDetails={setDriverDetails}
+        />
+      </div>}
+
+      {typeof deleteId === "number" &&
+      <div 
+        onClick={() => setDeleteId(null)}
+        className='w-screen h-screen fixed z-[9999] top-0 left-0 backdrop-blur-sm flex items-center justify-center'>
+        <DeletePopUp
+          deleteId={deleteId}
+          setDeleteId={setDeleteId}
         />
       </div>}
 
@@ -410,11 +478,12 @@ const DriverList = ({ driverList, area}) => {
                       >
                         View Details
                       </button>
-                      {/* <button 
-                        className='w-full h-10 flex items-center justify-start'
+                      <button 
+                        onClick={() => setDeleteId(driver.id)}
+                        className='w-full mt-5 h-10 flex text-red-600 items-center justify-start'
                       >
-                        Suspend
-                      </button> */}
+                        Delete
+                      </button>
                     </div>
                   </button>
                 </td>

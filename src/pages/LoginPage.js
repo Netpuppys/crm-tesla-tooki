@@ -6,10 +6,11 @@ import { IoIosMail, IoIosLock, IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axiosInstance from 'utils/AxiosInstance';
 import { ThreeDots } from 'react-loader-spinner';
 import "../styles/components/Login/LoginPage.css";
+import { useUserContext } from 'globalComponents/AppContext';
 
 const Login = ({ setLoggedIn, setUserData}) => {
     const navigate = useNavigate()
-    // const { setUserId } = useUserContext()
+    const { setAlert } = useUserContext()
     const { register, handleSubmit, formState: { errors } } = useForm()
     const [showPassword, setShowPassword] = useState(false)
     const [ loader, setLoader ] = useState(false)
@@ -32,7 +33,7 @@ const Login = ({ setLoggedIn, setUserData}) => {
             .post("/login", loginData)
             .then(res => {
                 const response = res.data.data
-                console.log(res.data.data)
+                console.log(res.data.data.data)
                 setUserData(response.user)
                 localStorage.setItem("access", res.data.data.access)
                 localStorage.setItem("refresh", res.data.data.refresh)
@@ -43,7 +44,8 @@ const Login = ({ setLoggedIn, setUserData}) => {
                 navigate("/analytics")
             })
             .catch(err => {
-                console.log(err)
+                setAlert(err.response.data.message)
+                
             })
             .finally(() => {
                 setLoader(false)

@@ -20,7 +20,7 @@ const initialFormState = {
 }
 
 const FranchiseAddition = () => {
-    const { driverList } = useUserContext()
+    const { driverList, fetchFranchise } = useUserContext()
     const [newFranchiseData, setNewFranchiseData] = useState(initialFormState);
     const [selectedFranchise, setSelectedFranchise] = useState("");
     const [errors, setErrors] = useState({});
@@ -85,7 +85,6 @@ const FranchiseAddition = () => {
         validation()
         
         const formData = {
-            username: newFranchiseData.username,
             user_type: "franchise",
             first_name: newFranchiseData.first_name,
             last_name: newFranchiseData.last_name,
@@ -109,6 +108,7 @@ const FranchiseAddition = () => {
                     console.log(res)
                     // setNewFranchiseData(initialFormState)
                     alert("Added Successfully")
+                    fetchFranchise()
                 })
                 .catch(err => console.log(err))
         }
@@ -149,24 +149,24 @@ const FranchiseAddition = () => {
                     <input
                         type='text'
                         placeholder='First Name'
-                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[30%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
+                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[45%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                         value={newFranchiseData.first_name}
                         onChange={e => handleInputChange(e.target.value, "first_name")}
                     />
                     <input
                         type='text'
                         placeholder='Last Name'
-                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[30%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
+                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[45%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                         value={newFranchiseData.last_name}
                         onChange={e => handleInputChange(e.target.value, "last_name")}
                     />
-                    <input
+                    {/* <input
                         type='text'
                         placeholder='User Name'
                         className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[27%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                         value={newFranchiseData.username}
                         onChange={e => handleInputChange(e.target.value, "username")}
-                    />
+                    /> */}
                     <input
                         type='email'
                         placeholder='Email ID'

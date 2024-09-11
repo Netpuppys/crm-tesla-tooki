@@ -13,7 +13,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import majorCities from 'globalComponents/data/majorCities';
 
 const DriverAddition = () => {
-    const { setAlert } = useUserContext()
+    const { setAlert, fetchDrivers } = useUserContext()
     const location = useLocation()
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
     const [ userList , setUserList ] = useState()
@@ -116,10 +116,10 @@ const DriverAddition = () => {
         formData.append('first_name', newAdmin.firstName);
         formData.append('last_name', newAdmin.lastName);
         formData.append('email', newAdmin.email);
-        formData.append('username', newAdmin.userName);
         formData.append('user_type', "driver");
         formData.append('phone_number', newAdmin.mobile);
         formData.append('password', newAdmin.password);
+        formData.append('city', newAdmin.city);
         formData.append('area', newAdmin.area);
         formData.append('license_no', newAdmin.dL);
         formData.append('aadhaar_no', newAdmin.aadhar);
@@ -137,6 +137,7 @@ const DriverAddition = () => {
                 setLoader(false)
                 console.log(res);
                 alert("Driver Created");
+                fetchDrivers()
             })
             .catch(err => {
                 setLoader(false)
@@ -186,13 +187,13 @@ const DriverAddition = () => {
                         value={newAdmin.lastName}
                         onChange={e => handleInputChange(e.target.value, "lastName")}
                     />
-                    <input
+                    {/* <input
                         type='text'
                         placeholder='Username'
                         className='community-input email-input'
                         value={newAdmin.userName}
                         onChange={e => handleInputChange(e.target.value, "userName")}
-                    />
+                    /> */}
                     <input
                         type='email'
                         placeholder='Email ID'
@@ -220,6 +221,7 @@ const DriverAddition = () => {
                         className='community-input email-input'
                         value={newAdmin.dL}
                         onChange={e => handleInputChange(e.target.value, "dL")}
+                        onInput={e => e.target.value = e.target.value.slice(0, 12)}
                     />
                     <input
                         type='number'
@@ -227,6 +229,14 @@ const DriverAddition = () => {
                         className='community-input email-input'
                         value={newAdmin.aadhar}
                         onChange={e => handleInputChange(e.target.value, "aadhar")}
+                        onInput={e => e.target.value = e.target.value.slice(0, 12)}
+                    />
+                    <input
+                        type='text'
+                        placeholder='city'
+                        className='community-input email-input'
+                        value={newAdmin.city}
+                        onChange={e => handleInputChange(e.target.value, "city")}
                     />
                     <select
                         value={newAdmin.area}
