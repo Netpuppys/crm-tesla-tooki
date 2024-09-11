@@ -9,6 +9,7 @@ import "../../styles/components/DriverAddition/DriverAddition.css"
 import axiosInstance from 'utils/AxiosInstance';
 import { FaCamera } from 'react-icons/fa';
 import { useUserContext } from 'globalComponents/AppContext';
+import { ThreeDots } from 'react-loader-spinner';
 
 const majorCities = [
     "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad",
@@ -22,6 +23,7 @@ const DriverAddition = () => {
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
     const [ userList , setUserList ] = useState()
     const [ fileUploaded, setFileUploaded ] = useState()
+    const [ loader, setLoader ] = useState(false)
 
     useEffect(() => {
       console.log(fileUploaded)
@@ -96,6 +98,8 @@ const DriverAddition = () => {
         formData.append('license_no', newAdmin.dL);
         formData.append('aadhaar_no', newAdmin.aadhar);
         formData.append('police_verification_letter', fileUploaded);
+
+        setLoader(true)
         
         axiosInstance
             .post("all/adddata/", formData, {
@@ -104,10 +108,12 @@ const DriverAddition = () => {
                 }
             })
             .then(res => {
+                setLoader(false)
                 console.log(res);
-                setAlert("Driver Created");
+                alert("Driver Created");
             })
             .catch(err => {
+                setLoader(false)
                 console.log(err);
                 const errors = err.response.data.data;
                 const allMessages = [];
@@ -253,9 +259,9 @@ const DriverAddition = () => {
             {/* <RedButton text={"Submit"} onClickHandler={handleSubmit}/> */}
             <button
                 onClick={handleSubmit}
-                className='px-4 py-2 text-xm text-white bg-green-600 rounded-full font-semibold'
+                className='px-8 py-2 text-xm text-white bg-green-600 rounded-full font-semibold'
             >
-                Submit
+                {!loader? "Submit" : <ThreeDots color='#ffffff' height={20} />}
             </button>
         </div>
     );
