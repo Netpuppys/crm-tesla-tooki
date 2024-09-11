@@ -410,11 +410,11 @@ const DriverList = ({ driverList, area}) => {
                       >
                         View Details
                       </button>
-                      <button 
+                      {/* <button 
                         className='w-full h-10 flex items-center justify-start'
                       >
                         Suspend
-                      </button>
+                      </button> */}
                     </div>
                   </button>
                 </td>
