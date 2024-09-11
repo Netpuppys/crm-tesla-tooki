@@ -56,12 +56,43 @@ const DriverAddition = () => {
         }));
     };
 
+    const validatePassword = (password) => {
+        const minLength = 8;
+        const numberRegex = /\d/;
+        // const upperCaseRegex = /[A-Z]/;
+        const lowerCaseRegex = /[a-z]/;
+    
+        if (password.length < minLength) {
+          alert(`Password must be at least ${minLength} characters long.`);
+          return false
+        }
+        if (!numberRegex.test(password)) {
+          alert('Password must contain at least one number.');
+          return false
+        }
+        // if (!upperCaseRegex.test(password)) {
+        //   alert('Password must contain at least one uppercase letter.');
+        //   return false
+        // }
+        if (!lowerCaseRegex.test(password)) {
+          alert('Password must contain at least one lowercase letter.');
+          return false
+        }
+        return true;
+      };
+    
+
     const handleSubmit = () => {
         console.log("clicked")
+        
         // Basic validation
         if (!newAdmin.firstName || !newAdmin.lastName || !newAdmin.email || !newAdmin.mobile || !newAdmin.password || !newAdmin.dL || !newAdmin.aadhar) {
             alert('All fields are required!');
             return;
+        }
+
+        if (!validatePassword(newAdmin.password)) {
+            return
         }
         
         // Email validation
@@ -123,7 +154,7 @@ const DriverAddition = () => {
                 errMessage.push(`${err.response.data.message}: `)
                 
                 for (let field in errors) {
-                    if (errors.hasOwnProperty(field)) {
+                    if (errors.hasOwnProperty(field) && field === "email" || field === "phone_number") {
                         allMessages.push(`${field}`);
                     }
                 }

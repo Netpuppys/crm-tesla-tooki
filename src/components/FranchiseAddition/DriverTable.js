@@ -300,7 +300,7 @@ const DriverList = ({ driverList, area}) => {
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Trip History</th>
               <th className="text-center text-[#1F384C] text-sm px-4 pr-10 py-4">Transactions</th>
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Balance</th>
-              <th className="text-right text-[#1F384C] text-sm px-4 py-4">Options</th>
+              {/* <th className="text-right text-[#1F384C] text-sm px-4 py-4">Options</th> */}
             </tr>
             <div className="h-12"></div>
           </thead>
@@ -377,7 +377,7 @@ const DriverList = ({ driverList, area}) => {
                 </td>
 
                 {/* driver details */}
-                <td className="px-2 pr-4 group py-4 text-orange-600 text-right">
+                {/* <td className="px-2 pr-4 group py-4 text-orange-600 text-right">
                   <button
                     className='underline py-3 relative text-right'
                   >
@@ -399,7 +399,7 @@ const DriverList = ({ driverList, area}) => {
                       </button>
                     </div>
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
