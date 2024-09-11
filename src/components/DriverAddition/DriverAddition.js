@@ -55,29 +55,30 @@ const DriverAddition = () => {
     };
 
     const handleSubmit = () => {
+        console.log("clicked")
         // Basic validation
-        if (!newAdmin.firstName || !newAdmin.lastName || !newAdmin.email || !newAdmin.mobile || !newAdmin.password || !newAdmin.dL || !newAdmin.aadhar || !newAdmin.area) {
-            setAlert('All fields are required!');
+        if (!newAdmin.firstName || !newAdmin.lastName || !newAdmin.email || !newAdmin.mobile || !newAdmin.password || !newAdmin.dL || !newAdmin.aadhar) {
+            alert('All fields are required!');
             return;
         }
         
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(newAdmin.email)) {
-            setAlert('Invalid email format!');
+            alert('Invalid email format!');
             return;
         }
     
         // Mobile number validation (e.g., 10 digits)
         const mobileRegex = /^\d{10}$/;
         if (!mobileRegex.test(newAdmin.mobile)) {
-            setAlert('Invalid mobile number! Must be 10 digits.');
+            alert('Invalid mobile number! Must be 10 digits.');
             return;
         }
     
         // Ensure file is uploaded
         if (!fileUploaded) {
-            setAlert('Please upload the police verification letter!');
+            alert('Please upload the police verification letter!');
             return;
         }
     
@@ -108,7 +109,25 @@ const DriverAddition = () => {
             })
             .catch(err => {
                 console.log(err);
-                setAlert(err.response.data.message);
+                const errors = err.response.data.data;
+                const allMessages = [];
+
+                const errMessage = []
+
+                errMessage.push(`${err.response.data.message}: `)
+                
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        allMessages.push(`${field}`);
+                    }
+                }
+
+                errMessage.push(allMessages.join(", "))
+                
+                errMessage.push("already registerred.")
+
+
+                alert(errMessage.join(' '));
             });
     
         return;
@@ -231,7 +250,13 @@ const DriverAddition = () => {
                 </div> */}
             </div>
 
-            <RedButton text={"Submit"} onClickHandler={handleSubmit}/>
+            {/* <RedButton text={"Submit"} onClickHandler={handleSubmit}/> */}
+            <button
+                onClick={handleSubmit}
+                className='px-4 py-2 text-xm text-white bg-green-600 rounded-full font-semibold'
+            >
+                Submit
+            </button>
         </div>
     );
 };

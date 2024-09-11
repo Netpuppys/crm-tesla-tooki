@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { Circles, ThreeCircles, ThreeDots } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
+import { BsThreeDotsVertical } from "react-icons/bs";
+import DriverDetails from './components/DriverDetails';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
@@ -172,6 +174,7 @@ const DriverList = ({ driverList, area}) => {
   const [ balanceId, setBalanceId ] = useState()
   const [ balance, setBalance ] = useState()
   const [ loader, setLoader ] = useState(false)
+  const [ showDetails, setShowDetails ] = useState(false)
 
   const fetchTripHistory = (id) => {
     setLoader(true)
@@ -225,6 +228,10 @@ const DriverList = ({ driverList, area}) => {
       .finally(() => setLoader(false))
   }
 
+  const handleCloseDetails = () => {
+    setShowDetails(false)
+  }
+
   return (
     <div className="w-full px-4 py-6 relative">
       <div className="mb-4">
@@ -235,6 +242,15 @@ const DriverList = ({ driverList, area}) => {
       <div className='w-screen backdrop-blur-sm h-screen z-[9999] fixed top-0 left-0 flex items-center justify-center pointer-events-auto'>
         <ThreeCircles
           color='#ff6b17'
+        />
+      </div>}
+
+      {showDetails &&
+      <div 
+        className='w-screen h-screen top-0 left-0 fixed z-[999] flex items-center justify-center pointer-events-auto'
+      >
+        <DriverDetails
+          handleClose={handleCloseDetails}
         />
       </div>}
 
@@ -284,6 +300,7 @@ const DriverList = ({ driverList, area}) => {
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Trip History</th>
               <th className="text-center text-[#1F384C] text-sm px-4 pr-10 py-4">Transactions</th>
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Balance</th>
+              {/* <th className="text-right text-[#1F384C] text-sm px-4 py-4">Options</th> */}
             </tr>
             <div className="h-12"></div>
           </thead>
@@ -295,7 +312,9 @@ const DriverList = ({ driverList, area}) => {
           <tbody className="mt-14">
             {newDriverList.map((driver) => (
               <tr key={driver.id} className="text-sm border-b-[1px] border-[#C7CBD9]">
-                <td className="flex items-center px-4 py-4">
+
+                {/* driver name */}
+                <td className="flex items-center text-center px-4 py-4">
                   <img
                     src={driver.profile_photo || defaultProfilePhoto} // Assuming a default profile image
                     alt="profile"
@@ -306,8 +325,14 @@ const DriverList = ({ driverList, area}) => {
                     <p className="text-green-500">{driver.area || "N/A"}</p>
                   </div>
                 </td>
-                <td className="px-4 py-4 text-orange-600">{driver.phone_number}</td>
-                <td className="px-4 py-4">
+
+                {/* phone number */}
+                <td className="px-4 py-4 text-center text-orange-600">
+                  {driver.phone_number}
+                </td>
+
+                {/* trip history */}
+                <td className="px-4 py-4 text-center">
                   <button 
                     onClick={() => fetchTripHistory(driver.id)}
                     className="bg-orange-100 text-orange-600 text-xs px-6 py-1 rounded-full hover:bg-orange-200"
@@ -315,10 +340,12 @@ const DriverList = ({ driverList, area}) => {
                     View Trip History
                   </button>
                 </td>
-                <td className="px-4 py-4 text-right">
+
+                {/* show transactions */}
+                <td className="px-4 py-4 text-center">
                   <button 
                     onClick={() => setShowTransactions(true)}
-                    className="bg-orange-100 text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
+                    className="bg-orange-100 mx-auto text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
                   >
                     <span>View Previous Transactions</span>
                     <svg
@@ -337,15 +364,42 @@ const DriverList = ({ driverList, area}) => {
                     </svg>
                   </button>
                 </td>
-                <td className="px-2 pr-4 py-4 text-orange-600 text-right">
+
+                {/* balance */}
+                <td className="px-2 pr-4 py-4 text-orange-600 text-center">
                   {/* <a href={`mailto:${driver.email}`} className="hover:underline">{driver.email}</a> */}
                   <button
                     onClick={() => handleShowBalance(driver.id)}
-                    className='underline text-right'
+                    className='underline text-center'
                   >
                     view
                   </button>
                 </td>
+
+                {/* driver details */}
+                {/* <td className="px-2 pr-4 group py-4 text-orange-600 text-right">
+                  <button
+                    className='underline py-3 relative text-right'
+                  >
+                    <div className='w-full h-full bg-orange-600 bg-opacity-20 px-1 py-2 rounded-md'>
+                      <BsThreeDotsVertical />
+                    </div>
+
+                    <div className='w-32 h-fit text-orange-600 border-[1px] border-orange-600 font-semibold backdrop-blur-lg absolute px-2 hidden group-hover:block bottom-[100%] right-0 rounded-2xl bg-white bg-opacity-50 shadow-2xl'>
+                      <button 
+                        onClick={() => setShowDetails(true)}
+                        className='w-full h-10 flex border-b-[1px] border-orange-600 border-opacity-30 items-center justify-start'
+                      >
+                        View Details
+                      </button>
+                      <button 
+                        className='w-full h-10 flex items-center justify-start'
+                      >
+                        Suspend
+                      </button>
+                    </div>
+                  </button>
+                </td> */}
               </tr>
             ))}
           </tbody>

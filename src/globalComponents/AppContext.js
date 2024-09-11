@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
   const [ driverList, setDriverList ] = useState()
   const [ franchiseList, setFranchiseList ] = useState()
   const [ userList, setUserList ] = useState()
+  const [ alert, setAlert ] = useState()
 
     useEffect(() => {
       if(logged) {
@@ -67,7 +68,9 @@ export const UserProvider = ({ children }) => {
         setUserData,
         driverList,
         franchiseList,
-        userList
+        userList,
+        alert,
+        setAlert
       }}
     >
       {children}

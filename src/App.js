@@ -16,6 +16,7 @@ import FranchiseAdditionPage from 'pages/FranchiseAdditionPage';
 import DriverAddition from 'components/DriverAddition/DriverAddition';
 import FranchiseList from 'components/FranchiseAddition/FranchiseList';
 import UserListPage from 'components/User/UserListPage';
+import Alert from 'globalComponents/ui/Alert';
 
 const LogOutButton = () => {
   const navigate = useNavigate()
@@ -45,6 +46,7 @@ function App() {
     <div className="App">
       <UserProvider>
       <BrowserRouter>
+        <Alert />
 
         <Routes>
           <Route path='/' element={<Navigate to="/login" />} />
