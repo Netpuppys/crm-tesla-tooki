@@ -9,7 +9,7 @@ const Alert = () => {
     }
 
     return (
-        <div className="fixed shadow-2xl animate-slideIn z-[999] top-5 right-10  px-10 py-2 text-lg font-medium text-center bg-white rounded-full border-2 border-orange-600">
+        <div className="fixed shadow-2xl z-[9999] animate-slideIn top-5 right-10  px-10 py-2 text-lg font-medium text-center bg-white rounded-full border-2 border-orange-600">
             {alert}
         </div>
     )

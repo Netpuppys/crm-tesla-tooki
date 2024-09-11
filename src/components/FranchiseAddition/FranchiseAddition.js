@@ -1,38 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import RedButton from 'globalComponents/ui/RedButton';
 import "../../styles/components/Communities/Communities.css";
 import axiosInstance from 'utils/AxiosInstance';
 import DriverList from './DriverTable';
 import { useUserContext } from 'globalComponents/AppContext';
-
-// Add a list of major cities in India
-const majorCities = [
-    "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad",
-    "Chennai", "Kolkata", "Pune", "Jaipur", "Surat",
-    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane"
-];
-
-// {
-//     "username": "fran34",
-//     "password": "securepassword",
-//     "email": "frise@example.com",
-//     "first_name": "John",
-//     "last_name": "Doe",
-//     "user_type": "franchise",
-//     "phone_number": "123453367890",
-//     "profile_photo": null,
-//     "city": "CityName",
-//     "area": "AreaName",
-//     "license_no": null,
-//     "aadhaar_no": null,
-//     "police_verification_letter": null,
-//     "partners": 3,
-//     "partner_details": [
-//         {"name": "nirmal"},
-//         {"name": "alok"},
-//         {"name": "akash"}
-//     ]
-// }
+import majorCities from 'globalComponents/data/majorCities';
 
 const initialFormState = { 
     username: "",

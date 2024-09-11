@@ -15,6 +15,16 @@ export const UserProvider = ({ children }) => {
   const [ userList, setUserList ] = useState()
   const [ alert, setAlert ] = useState()
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log(alert)
+      setAlert(null);
+    }, 5000);
+  
+    // Cleanup function to clear the timeout
+    return () => clearTimeout(timer);
+  }, [alert]);
+
     useEffect(() => {
       if(logged) {
           axiosInstance

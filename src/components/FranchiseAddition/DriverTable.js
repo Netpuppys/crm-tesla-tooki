@@ -175,6 +175,7 @@ const DriverList = ({ driverList, area}) => {
   const [ balance, setBalance ] = useState()
   const [ loader, setLoader ] = useState(false)
   const [ showDetails, setShowDetails ] = useState(false)
+  const [ driverDetails, setDriverDetails ] = useState()
 
   const fetchTripHistory = (id) => {
     setLoader(true)
@@ -232,6 +233,21 @@ const DriverList = ({ driverList, area}) => {
     setShowDetails(false)
   }
 
+  const handleFetchDriverDetails = (id) => {
+    if (typeof id === "number") {
+      axiosInstance
+      .get(`/account/users/${id}/`)
+      .then(res => {
+        const data = res.data;
+        setDriverDetails(data)
+        setShowDetails(true)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
+  }
+
   return (
     <div className="w-full px-4 py-6 relative">
       <div className="mb-4">
@@ -251,6 +267,8 @@ const DriverList = ({ driverList, area}) => {
       >
         <DriverDetails
           handleClose={handleCloseDetails}
+          driverDetails={driverDetails}
+          setDriverDetails={setDriverDetails}
         />
       </div>}
 
@@ -300,7 +318,7 @@ const DriverList = ({ driverList, area}) => {
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Trip History</th>
               <th className="text-center text-[#1F384C] text-sm px-4 pr-10 py-4">Transactions</th>
               <th className="text-center text-[#1F384C] text-sm px-4 py-4">Balance</th>
-              {/* <th className="text-right text-[#1F384C] text-sm px-4 py-4">Options</th> */}
+              <th className="text-right text-[#1F384C] text-sm px-4 py-4">Options</th>
             </tr>
             <div className="h-12"></div>
           </thead>
@@ -377,7 +395,7 @@ const DriverList = ({ driverList, area}) => {
                 </td>
 
                 {/* driver details */}
-                {/* <td className="px-2 pr-4 group py-4 text-orange-600 text-right">
+                <td className="px-2 pr-4 group py-4 text-orange-600 text-right">
                   <button
                     className='underline py-3 relative text-right'
                   >
@@ -387,7 +405,7 @@ const DriverList = ({ driverList, area}) => {
 
                     <div className='w-32 h-fit text-orange-600 border-[1px] border-orange-600 font-semibold backdrop-blur-lg absolute px-2 hidden group-hover:block bottom-[100%] right-0 rounded-2xl bg-white bg-opacity-50 shadow-2xl'>
                       <button 
-                        onClick={() => setShowDetails(true)}
+                        onClick={() => handleFetchDriverDetails(driver.id)}
                         className='w-full h-10 flex border-b-[1px] border-orange-600 border-opacity-30 items-center justify-start'
                       >
                         View Details
@@ -399,7 +417,7 @@ const DriverList = ({ driverList, area}) => {
                       </button>
                     </div>
                   </button>
-                </td> */}
+                </td>
               </tr>
             ))}
           </tbody>

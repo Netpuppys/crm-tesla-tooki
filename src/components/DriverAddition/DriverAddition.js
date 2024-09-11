@@ -10,12 +10,7 @@ import axiosInstance from 'utils/AxiosInstance';
 import { FaCamera } from 'react-icons/fa';
 import { useUserContext } from 'globalComponents/AppContext';
 import { ThreeDots } from 'react-loader-spinner';
-
-const majorCities = [
-    "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad",
-    "Chennai", "Kolkata", "Pune", "Jaipur", "Surat",
-    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane"
-];
+import majorCities from 'globalComponents/data/majorCities';
 
 const DriverAddition = () => {
     const { setAlert } = useUserContext()
