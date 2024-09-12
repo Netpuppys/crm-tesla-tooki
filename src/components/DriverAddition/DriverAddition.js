@@ -243,7 +243,7 @@ const DriverAddition = () => {
                         onChange={handleCityChange}
                         className='community-input email-input'
                     >
-                        <option value="" disabled>Select Area</option>
+                        <option value="">Select Area</option>
                         {majorCities.map(city => (
                             <option key={city} value={city}>{city}</option>
                         ))}

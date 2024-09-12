@@ -7,13 +7,17 @@ import axiosInstance from 'utils/AxiosInstance';
 import { ThreeDots } from 'react-loader-spinner';
 import "../styles/components/Login/LoginPage.css";
 import { useUserContext } from 'globalComponents/AppContext';
+import ForgotPassword from 'components/login/ForgotPassword';
+
+
 
 const Login = ({ setLoggedIn, setUserData}) => {
     const navigate = useNavigate()
     const { setAlert } = useUserContext()
     const { register, handleSubmit, formState: { errors } } = useForm()
-    const [showPassword, setShowPassword] = useState(false)
+    const [ showPassword, setShowPassword] = useState(false)
     const [ loader, setLoader ] = useState(false)
+    const [ forgotPass, setForgotPass ] = useState(false)
 
     useEffect(() => {
         sessionStorage.setItem("logged", false)
@@ -29,6 +33,7 @@ const Login = ({ setLoggedIn, setUserData}) => {
             password: data.password,
             login_type: "admin"
         }
+        
         axiosInstance
             .post("/login", loginData)
             .then(res => {
@@ -59,6 +64,11 @@ const Login = ({ setLoggedIn, setUserData}) => {
   return (
     <div className='login-page-bg'>
         <div className='main-content'>
+
+            {forgotPass &&
+            <ForgotPassword
+                setForgotPass={setForgotPass}
+            />}
 
             <img src={mainLogo} className='main-logo' alt='toooki' />
 
@@ -114,7 +124,10 @@ const Login = ({ setLoggedIn, setUserData}) => {
                                     Remember me
                                 </p>
                             </div>
-                            <button className='forgot-btn'>
+                            <button 
+                                onClick={() => setForgotPass(true)}
+                                className='forgot-btn'
+                            >
                                 Forgot Password?
                             </button>
                         </div>

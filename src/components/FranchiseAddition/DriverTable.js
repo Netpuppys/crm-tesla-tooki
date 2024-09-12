@@ -165,7 +165,9 @@ const DeletePopUp = ({ deleteId, setDeleteId }) => {
         console.log(res)
         setTimer(5)
         setDriverList(prev => {
-          const filterred = prev
+          const filterred = prev.filter(item => item.id !== deleteId)
+          
+          return filterred
         })
         setTimeout(() => {
           setDeleteId(null)
