@@ -172,7 +172,7 @@ const UserTable = ({ driverList, area }) => {
             {newDriverList.map((driver) => (
               <tr key={driver.id} className="text-sm border-b-[1px] text-center border-[#C7CBD9]">
                 {/* name */}
-                <td className="flex items-center px-4 py-4">
+                <td className="flex items-start text-left px-4 py-4">
                   <img
                     src={driver.profile_photo || defaultProfilePhoto} // Assuming a default profile image
                     alt="profile"

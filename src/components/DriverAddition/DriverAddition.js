@@ -19,6 +19,7 @@ const DriverAddition = () => {
     const [ userList , setUserList ] = useState()
     const [ fileUploaded, setFileUploaded ] = useState()
     const [ loader, setLoader ] = useState(false)
+    const [ selectedCity, setSelectedCity ] = useState()
 
     useEffect(() => {
       console.log(fileUploaded)
@@ -45,9 +46,17 @@ const DriverAddition = () => {
     };
 
     const handleCityChange = (event) => {
+        setSelectedCity(event.target.value)
         setNewAdmin(prev => ({
             ...prev,
             area: event.target.value,
+        }));
+    };
+
+    const handleAreaChange = (event) => {
+        setNewAdmin(prev => ({
+            ...prev,
+            city: event.target.value,
         }));
     };
 
@@ -78,11 +87,10 @@ const DriverAddition = () => {
     
 
     const handleSubmit = () => {
-        console.log("clicked")
         
         // Basic validation
         if (!newAdmin.firstName || !newAdmin.lastName || !newAdmin.email || !newAdmin.mobile || !newAdmin.password || !newAdmin.dL || !newAdmin.aadhar) {
-            alert('All fields are required!');
+            setAlert('All fields are required!');
             return;
         }
 
@@ -93,20 +101,20 @@ const DriverAddition = () => {
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(newAdmin.email)) {
-            alert('Invalid email format!');
+            setAlert('Invalid email format!');
             return;
         }
     
         // Mobile number validation (e.g., 10 digits)
         const mobileRegex = /^\d{10}$/;
         if (!mobileRegex.test(newAdmin.mobile)) {
-            alert('Invalid mobile number! Must be 10 digits.');
+            setAlert('Invalid mobile number! Must be 10 digits.');
             return;
         }
     
         // Ensure file is uploaded
         if (!fileUploaded) {
-            alert('Please upload the police verification letter!');
+            setAlert('Please upload the police verification letter!');
             return;
         }
     
@@ -231,20 +239,24 @@ const DriverAddition = () => {
                         onChange={e => handleInputChange(e.target.value, "aadhar")}
                         onInput={e => e.target.value = e.target.value.slice(0, 12)}
                     />
-                    <input
-                        type='text'
-                        placeholder='city'
-                        className='community-input email-input'
-                        value={newAdmin.city}
-                        onChange={e => handleInputChange(e.target.value, "city")}
-                    />
                     <select
                         value={newAdmin.area}
                         onChange={handleCityChange}
                         className='community-input email-input'
                     >
-                        <option value="">Select Area</option>
+                         <option value="">Select Area</option>
                         {majorCities.map(city => (
+                            <option key={city.name} value={city.name}>{city.name}</option>
+                        ))}
+                    </select>
+                    <select
+                        value={newAdmin.city}
+                        onChange={handleAreaChange}
+                        disabled={selectedCity? false : true}
+                        className='community-input email-input'
+                    >
+                        <option value="">Select City</option>
+                        {majorCities.filter(item => item.name === selectedCity)[0]?.area.map(city => (
                             <option key={city} value={city}>{city}</option>
                         ))}
                     </select>

@@ -5,14 +5,15 @@ import axiosInstance from 'utils/AxiosInstance';
 import DriverDetails from './components/DriverDetails';
 import FranchiseDetails from './components/FranchiseDetails';
 import { useUserContext } from 'globalComponents/AppContext';
+import { ThreeCircles } from 'react-loader-spinner';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
-const TransactionHistory = ({ setShowTransactions, showTransactions }) => {
+const PartnerDetails = ({ setPartnersDetails, partnersDetails }) => {
   return (
     <div className='w-full bg-white z-50 max-w-[30rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
         <button
-            onClick={() => setShowTransactions(null)}
+            onClick={() => setPartnersDetails(null)}
             className='w-6 aspect-square  absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20'
         >
             <IoClose />
@@ -21,13 +22,16 @@ const TransactionHistory = ({ setShowTransactions, showTransactions }) => {
             Partner Details
         </p>
         <div className='w-full pt-10'>
-        {showTransactions.map((item, index) => (
+        {partnersDetails.map((item, index) => (
             <div className='w-full flex py-2  items-center border-b-2 last:border-b-0 border-black border-opacity-15 justify-between'>
                 <p className='text-lg text-[#525252]'>
                     Partner {index+1}:
                 </p>
-                <p className='text-lg'>
+                <p className='text-lg capitalize'>
                     {item.name}
+                    <span className='ml-4 px-2 bg-orange-600 bg-opacity-50 backdrop-blur-sm text-white rounded-xl py-1 text-xs font-medium'>
+                      Share: {15/partnersDetails.length}%
+                    </span>
                 </p>
             </div>))}
         </div>
@@ -95,10 +99,11 @@ const DeletePopUp = ({ deleteId, setDeleteId }) => {
 
 const FranchiseTable = ({ franchiseList, area}) => {
   const [ newfranchiseList, setNewfranchiseList ] = useState(franchiseList)
-  const [ showTransactions, setShowTransactions ] = useState(null)
+  const [ partnersDetails, setPartnersDetails ] = useState(null)
   const [ showDetails, setShowDetails ] = useState(false)
   const [ franchiseDetails, setFranchiseDetails ] = useState()
   const [ deleteId, setDeleteId ] = useState(null)
+  const [ loader, setLoader ] = useState(false)
 
   useEffect(() => {
     if (area) {
@@ -111,6 +116,7 @@ const FranchiseTable = ({ franchiseList, area}) => {
 
   const handleFetchFranchise = (id) => {
     if (typeof id === "number") {
+      setLoader(true)
       axiosInstance
       .get(`/account/users/${id}/`)
       .then(res => {
@@ -121,6 +127,9 @@ const FranchiseTable = ({ franchiseList, area}) => {
       .catch(err => {
         console.error(err)
       })
+      .finally(() => {
+        setLoader(false)
+      })
     }
   }
 
@@ -130,6 +139,13 @@ const FranchiseTable = ({ franchiseList, area}) => {
 
   return (
     <div className="w-full px-4 py-6">
+
+      {loader &&
+      <div className='w-screen h-screen fixed top-0 left-0 z-[9999] backdrop-blur-sm flex items-center justify-center pointer-events-auto'>
+        <ThreeCircles
+          color='#ea580c'
+        />
+      </div>}
 
       {showDetails &&
       <div 
@@ -152,11 +168,11 @@ const FranchiseTable = ({ franchiseList, area}) => {
         />
       </div>}
       
-      {showTransactions &&
+      {partnersDetails &&
       <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
-        <TransactionHistory 
-            showTransactions={showTransactions}
-            setShowTransactions={setShowTransactions}
+        <PartnerDetails 
+            partnersDetails={partnersDetails}
+            setPartnersDetails={setPartnersDetails}
         />
       </div>}
 
@@ -208,7 +224,7 @@ const FranchiseTable = ({ franchiseList, area}) => {
                 </td>
                 <td className="px-4 py-4 text-right">
                   <button 
-                    onClick={() => setShowTransactions(driver.another_additional_details)}
+                    onClick={() => setPartnersDetails(driver.another_additional_details)}
                     className="bg-orange-100 text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
                   >
                     <span>View Partners</span>

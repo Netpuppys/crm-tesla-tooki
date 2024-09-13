@@ -20,10 +20,11 @@ const initialFormState = {
 }
 
 const FranchiseAddition = () => {
-    const { driverList, fetchFranchise } = useUserContext()
+    const { driverList, fetchFranchise, setAlert } = useUserContext()
     const [newFranchiseData, setNewFranchiseData] = useState(initialFormState);
     const [selectedFranchise, setSelectedFranchise] = useState("");
     const [errors, setErrors] = useState({});
+    const [ selectedCity, setSelectedCity ] = useState()
 
     useEffect(() => {
         console.log(newFranchiseData);
@@ -51,38 +52,64 @@ const FranchiseAddition = () => {
     // };
 
     const handleCityChange = (event) => {
+        setSelectedCity(event.target.value)
         setNewFranchiseData(prev => ({
             ...prev,
             area: event.target.value,
         }));
     };
 
+    const handleAreaChange = (event) => {
+        setNewFranchiseData(prev => ({
+            ...prev,
+            city: event.target.value,
+        }));
+    };
+
 
     const validation = () => {
-        const newErrors = {};
-
         // Validate newFranchiseData fields
-        if (!newFranchiseData.first_name) newErrors.first_name = "First Name is required";
-        if (!newFranchiseData.last_name) newErrors.last_name = "Last Name is required";
+        if (!newFranchiseData.first_name) {
+            setAlert( "First Name is required")
+            return false
+        }
+        if (!newFranchiseData.last_name) {
+            setAlert("Last Name is required")
+            return false
+        };
         if (!newFranchiseData.email) {
-            newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(newFranchiseData.email)) {
-            newErrors.email = "Email is invalid";
+            setAlert("Email is required")
+            return false
+        } else if (!/^\S+@\S+\.\S+$/.test(newFranchiseData.email)) {
+            setAlert("Email is invalid")
+            return false
         }
         if (!newFranchiseData.phone_number) {
-            newErrors.phone_number = "phone_number Number is required";
+            setAlert("phone_number Number is required")
+            return false
         } else if (!/^\d{10}$/.test(newFranchiseData.phone_number)) {
-            newErrors.phone_number = "phone_number Number is invalid";
+            setAlert("phone_number Number is invalid")
+            return false
         }
-
-        // Validate selectedFranchise
-        if (!selectedFranchise) newErrors.selectedFranchise = "Please select a franchise";
-
-        setErrors(newErrors);
+        if (!newFranchiseData.password) {
+            setAlert("Password is required");
+            return;
+        } else if (!/^(?=.*\d).{8,}$/.test(newFranchiseData.password)) {
+            setAlert("Password must be at least 8 characters long and contain at least 1 number");
+            return;
+        }
+        if (!newFranchiseData.partners.length === 0) {
+            setAlert("Partners are mandatory")
+            return
+        }
+        
+        return true
     }
 
     const handleSubmit = () => {
-        validation()
+        if (!validation()) {
+            return
+        }
         
         const formData = {
             user_type: "franchise",
@@ -110,7 +137,16 @@ const FranchiseAddition = () => {
                     alert("Added Successfully")
                     fetchFranchise()
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    // console.log(err)
+                    if (err.response.data.data.phone_number) {
+                        setAlert("Phone Number already in use")
+                        return
+                    }
+                    if (err.response.data.data.email) {
+                        setAlert("Email already in use")
+                    }
+                })
         }
     }
 
@@ -188,13 +224,17 @@ const FranchiseAddition = () => {
                         value={newFranchiseData.password}
                         onChange={e => handleInputChange(e.target.value, "password")}
                     />
-                    <input
-                        type='text'
-                        placeholder='City'
+                    {/* Select dropdown for Area */}
+                    <select
+                        value={newFranchiseData.area}
+                        onChange={handleCityChange}
                         className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[60%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
-                        value={newFranchiseData.city}
-                        onChange={e => handleInputChange(e.target.value, "city")}
-                    />
+                    >
+                        <option value="">Select Area</option>
+                        {majorCities.map(city => (
+                            <option key={city.name} value={city.name}>{city.name}</option>
+                        ))}
+                    </select>
                     <div className='w-[45%] h-12 flex items-center justify-start gap-4'>
                         <p className='text-[#888888] h-full w-full rounded-full bg-[#FFE3D7] flex items-center justify-start px-6'>
                             {newFranchiseData.noOfPartners ? newFranchiseData.noOfPartners : "Number of Partners"}
@@ -214,19 +254,19 @@ const FranchiseAddition = () => {
                     </div>
                     {/* <input
                         type='text'
-                        placeholder='Area'
+                        placeholder='City'
                         className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[45%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
-                        value={newFranchiseData.area}
-                        onChange={e => handleInputChange(e.target.value, "area")}
+                        value={newFranchiseData.city}
+                        onChange={e => handleInputChange(e.target.value, "city")}
                     /> */}
-                    {/* Select dropdown for Area */}
                     <select
-                        value={newFranchiseData.area}
-                        onChange={handleCityChange}
+                        value={newFranchiseData.city}
+                        onChange={handleAreaChange}
+                        disabled={selectedCity? false : true}
                         className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[45%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                     >
-                        <option value="" disabled>Select Area</option>
-                        {majorCities.map(city => (
+                        <option value="">Select City</option>
+                        {majorCities.filter(item => item.name === selectedCity)[0]?.area.map(city => (
                             <option key={city} value={city}>{city}</option>
                         ))}
                     </select>
@@ -263,7 +303,7 @@ const FranchiseAddition = () => {
                 Submit
             </button>
 
-            {newFranchiseData.area &&
+            {newFranchiseData?.area &&
             <div className='mt-10 w-full'>
                 <DriverList driverList={driverList} area={newFranchiseData.area}/>
             </div>}

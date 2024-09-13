@@ -295,6 +295,7 @@ const DriverList = ({ driverList, area}) => {
 
   const handleFetchDriverDetails = (id) => {
     if (typeof id === "number") {
+      setLoader(true)
       axiosInstance
       .get(`/account/users/${id}/`)
       .then(res => {
@@ -304,6 +305,9 @@ const DriverList = ({ driverList, area}) => {
       })
       .catch(err => {
         console.error(err)
+      })
+      .finally(() => {
+        setLoader(false)
       })
     }
   }
@@ -402,7 +406,7 @@ const DriverList = ({ driverList, area}) => {
               <tr key={driver.id} className="text-sm border-b-[1px] border-[#C7CBD9]">
 
                 {/* driver name */}
-                <td className="flex items-center text-center px-4 py-4">
+                <td className="flex items-center text-left px-4 py-4">
                   <img
                     src={driver.profile_photo || defaultProfilePhoto} // Assuming a default profile image
                     alt="profile"
