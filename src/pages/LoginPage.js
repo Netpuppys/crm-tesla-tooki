@@ -112,8 +112,8 @@ const Login = ({ setLoggedIn, setUserData}) => {
                             </button>
                         </div>
 
-                        <div className='bottom-buttons'>
-                            <div className='checkbox-div'>
+                        <div className='w-full flex items-center justify-end mb-2 -mt-3'>
+                            {/* <div className='checkbox-div'>
                                 <input
                                     type='checkbox'
                                     {...register("remember")}
@@ -123,10 +123,10 @@ const Login = ({ setLoggedIn, setUserData}) => {
                                 <p className='remember-text'>
                                     Remember me
                                 </p>
-                            </div>
+                            </div> */}
                             <button 
                                 onClick={() => setForgotPass(true)}
-                                className='forgot-btn'
+                                className='text-gray-600 text-opacity-70'
                             >
                                 Forgot Password?
                             </button>
