@@ -213,16 +213,16 @@ const FranchiseTable = ({ franchiseList, area}) => {
                     <p className="text-green-500">{driver.area || "--"}</p>
                   </div>
                 </td>
-                <td className="px-4 py-4 text-orange-600">{driver.phone_number}</td>
-                <td className="px-4 py-4 text-orange-600">
+                <td className="px-4 py-4 text-center text-orange-600">{driver.phone_number}</td>
+                <td className="px-4 py-4 text-center text-orange-600">
                   <a href={`mailto:${driver.email}`} className="hover:underline">{driver.email}</a>
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-4 text-center">
                   <p className='text-orange-600'>
                     {driver.additional_details?.partners? driver.additional_details?.partners : 0}
                   </p>
                 </td>
-                <td className="px-4 py-4 text-right">
+                <td className="px-4 py-4 text-center">
                   <button 
                     onClick={() => setPartnersDetails(driver.another_additional_details)}
                     className="bg-orange-100 text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
@@ -246,7 +246,7 @@ const FranchiseTable = ({ franchiseList, area}) => {
                 </td>
 
                 {/* franchise details */}
-                <td className="px-2 pr-4 group py-4 text-orange-600 text-right">
+                <td className="px-2 pr-4 group py-4 text-orange-600 text-center">
                   <button
                     className='underline py-3 relative text-right'
                   >
