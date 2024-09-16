@@ -11,7 +11,7 @@ const defaultProfilePhoto = "https://via.placeholder.com/150"
 
 const PartnerDetails = ({ setPartnersDetails, partnersDetails }) => {
   return (
-    <div className='w-full bg-white z-50 max-w-[30rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
+    <div className='w-full bg-white z-50 max-w-[40rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
         <button
             onClick={() => setPartnersDetails(null)}
             className='w-6 aspect-square  absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20'
@@ -29,7 +29,7 @@ const PartnerDetails = ({ setPartnersDetails, partnersDetails }) => {
                 </p>
                 <p className='text-lg capitalize'>
                     {item.name}
-                    <span className='ml-4 px-2 bg-orange-600 bg-opacity-50 backdrop-blur-sm text-white rounded-xl py-1 text-xs font-medium'>
+                    <span className='ml-4 px-2 text-nowrap bg-orange-600 bg-opacity-50 backdrop-blur-sm text-white rounded-xl py-1 text-xs font-medium'>
                       Share: {15/partnersDetails.length}%
                     </span>
                 </p>
