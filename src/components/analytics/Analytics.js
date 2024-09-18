@@ -10,7 +10,7 @@ import ErrorPage from 'globalComponents/ErrorPage/ErrorPage'
 
 const Analytics = () => {
     const [ apiData, setApiData ] = useState()
-    const [ error, setError ] = useState(false);
+    const [ error, setError ] = useState(false)
 
     useEffect(() => {
         axiosInstance

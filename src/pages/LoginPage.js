@@ -9,18 +9,27 @@ import "../styles/components/Login/LoginPage.css";
 import { useUserContext } from 'globalComponents/AppContext';
 import ForgotPassword from 'components/login/ForgotPassword';
 
-
-
 const Login = ({ setLoggedIn, setUserData}) => {
     const navigate = useNavigate()
+
     const { setAlert } = useUserContext()
     const { register, handleSubmit, formState: { errors } } = useForm()
+
     const [ showPassword, setShowPassword] = useState(false)
     const [ loader, setLoader ] = useState(false)
     const [ forgotPass, setForgotPass ] = useState(false)
 
     useEffect(() => {
-        sessionStorage.setItem("logged", false)
+        const token = localStorage.getItem("access")
+        const logged = localStorage.getItem("logged")
+
+        if (token && logged) {
+            navigate("/analytics")
+            return
+        }
+
+        localStorage.clear()
+        localStorage.setItem("logged", false)
         sessionStorage.setItem("userData", null)
         setLoggedIn(false)
     }, [])
@@ -42,9 +51,8 @@ const Login = ({ setLoggedIn, setUserData}) => {
                 setUserData(response.user)
                 localStorage.setItem("access", res.data.data.access)
                 localStorage.setItem("refresh", res.data.data.refresh)
-                sessionStorage.setItem("logged", true)
+                localStorage.setItem("logged", true)
                 sessionStorage.setItem("userData", JSON.stringify(response.user))
-                // setUserId(response.user.id)
                 setLoggedIn(true)
                 navigate("/analytics")
             })
@@ -56,10 +64,6 @@ const Login = ({ setLoggedIn, setUserData}) => {
                 setLoader(false)
             })
     };
-
-    // const goToSignUp = () => {
-    //     navigate("/signup")
-    // }
 
   return (
     <div className='login-page-bg'>
@@ -113,23 +117,12 @@ const Login = ({ setLoggedIn, setUserData}) => {
                         </div>
 
                         <div className='w-full flex items-center justify-end mb-2 -mt-3'>
-                            {/* <div className='checkbox-div'>
-                                <input
-                                    type='checkbox'
-                                    {...register("remember")}
-                                    className='remember-checkbox'
-                                    defaultChecked
-                                />
-                                <p className='remember-text'>
-                                    Remember me
-                                </p>
-                            </div> */}
-                            <button 
+                            <span
                                 onClick={() => setForgotPass(true)}
                                 className='text-gray-600 text-opacity-70'
                             >
                                 Forgot Password?
-                            </button>
+                            </span>
                         </div>
 
                         <button type="submit" className="main-login-btn supermercado">
@@ -137,9 +130,6 @@ const Login = ({ setLoggedIn, setUserData}) => {
                         </button>
                     </form>
 
-                    {/* <button onClick={goToSignUp} className='create-new-btn'>
-                        Create a new account
-                    </button> */}
             </div>
        </div>
     </div>

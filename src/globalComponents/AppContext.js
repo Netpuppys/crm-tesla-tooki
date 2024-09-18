@@ -4,7 +4,7 @@ import axiosInstance from 'utils/AxiosInstance';
 const AppContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const logged = sessionStorage.getItem("logged")
+  const logged = localStorage.getItem("logged")
   const [ name, setName] = useState('');
   const [ userId, setUserId ] = useState()
   const [ loggedIn, setLoggedIn ] = useState(false)

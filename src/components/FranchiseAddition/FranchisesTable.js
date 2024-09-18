@@ -1,105 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { IoClose } from 'react-icons/io5';
 import axiosInstance from 'utils/AxiosInstance';
-import DriverDetails from './components/DriverDetails';
 import FranchiseDetails from './components/FranchiseDetails';
-import { useUserContext } from 'globalComponents/AppContext';
 import { ThreeCircles } from 'react-loader-spinner';
+import PartnerDetails from './components/PartnerDetails';
+import DeletePopUp from './components/DeletePopUp';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
-const PartnerDetails = ({ setPartnersDetails, partnersDetails }) => {
-  return (
-    <div className='w-full bg-white z-50 max-w-[40rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
-        <button
-            onClick={() => setPartnersDetails(null)}
-            className='w-6 aspect-square  absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20'
-        >
-            <IoClose />
-        </button>
-        <p className='text-3xl text-orange-600 supermercado'>
-            Partner Details
-        </p>
-        <div className='w-full pt-10'>
-        {partnersDetails.map((item, index) => (
-            <div className='w-full flex py-2  items-center border-b-2 last:border-b-0 border-black border-opacity-15 justify-between'>
-                <p className='text-lg text-[#525252]'>
-                    Partner {index+1}:
-                </p>
-                <p className='text-lg capitalize'>
-                    {item.name}
-                    <span className='ml-4 px-2 text-nowrap bg-orange-600 bg-opacity-50 backdrop-blur-sm text-white rounded-xl py-1 text-xs font-medium'>
-                      Share: {15/partnersDetails.length}%
-                    </span>
-                </p>
-            </div>))}
-        </div>
-    </div>
-  )
-}
-
-const DeletePopUp = ({ deleteId, setDeleteId }) => {
-  const { setFranchiseList } = useUserContext()
-  const [ timer, setTimer ] = useState(5);
-
-  useEffect(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer(prev => prev - 1);
-      }, 1000);
-      return () => clearInterval(interval); // Clear the interval on component unmount
-    } else {
-      // Add any action after 5 seconds, like closing the popup
-      console.log("Timer finished, proceeding with action.");
-    }
-  }, [timer]);
-
-  const handleClick = () => {
-    if (typeof deleteId === "number") {
-      axiosInstance
-      .delete(`/all/franchise/${deleteId}/`)
-      .then(res => {
-        console.log(res)
-        setTimer(5)
-        setFranchiseList(prev => {
-          const filterred = prev.filter(item => item.id !== deleteId)
-          
-          return filterred
-        })
-        setTimeout(() => {
-          setDeleteId(null)
-        }, 5000)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-    }
-  }
-
-  return (
-    <div className='w-fit p-5 text-center backdrop-blur-md bg-orange-500 bg-opacity-15 z-[9999] px-10 rounded-xl shadow-3xl border-2 border-orange-600 flex items-center flex-col justify-center '>
-      <p className='text-3xl supermercado'>
-        Are You Sure? 
-      </p>
-      <p className='text-sm pt-4'>
-        You can delete in: {timer}
-      </p>
-
-      <button
-        disabled={timer!==0}
-        onClick={handleClick}
-        className='w-20 mt-10 h-10 bg-[#ff3333] rounded-full text-white font-medium flex items-center justify-center disabled:bg-gray-500 disabled:opacity-50'
-      >
-        Delete
-      </button>
-    </div>
-  )
-}
-
-const FranchiseTable = ({ franchiseList, area}) => {
+const FranchiseTable = ({ franchiseList, area }) => {
   const [ newfranchiseList, setNewfranchiseList ] = useState(franchiseList)
   const [ partnersDetails, setPartnersDetails ] = useState(null)
+  const [ franchiseId, setFranchiseId ] = useState()
   const [ showDetails, setShowDetails ] = useState(false)
   const [ franchiseDetails, setFranchiseDetails ] = useState()
   const [ deleteId, setDeleteId ] = useState(null)
@@ -137,6 +49,11 @@ const FranchiseTable = ({ franchiseList, area}) => {
     setShowDetails(false)
   }
 
+  const handlePartnerView = (id, data) => {
+    setFranchiseId(id)
+    setPartnersDetails(data)
+  }
+
   return (
     <div className="w-full px-4 py-6">
 
@@ -170,7 +87,9 @@ const FranchiseTable = ({ franchiseList, area}) => {
       
       {partnersDetails &&
       <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
-        <PartnerDetails 
+        <PartnerDetails
+            franchiseId={franchiseId}
+            setFranchiseId={setFranchiseId}
             partnersDetails={partnersDetails}
             setPartnersDetails={setPartnersDetails}
         />
@@ -224,7 +143,7 @@ const FranchiseTable = ({ franchiseList, area}) => {
                 </td>
                 <td className="px-4 py-4 text-center">
                   <button 
-                    onClick={() => setPartnersDetails(driver.another_additional_details)}
+                    onClick={() => handlePartnerView(driver.id, driver.another_additional_details)}
                     className="bg-orange-100 text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
                   >
                     <span>View Partners</span>

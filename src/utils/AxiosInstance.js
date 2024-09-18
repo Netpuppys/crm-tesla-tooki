@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // const baseURL = 'https://render-1-75jn.onrender.com'
 const baseURL = "https://tooki.repsoft.in/"
@@ -31,5 +32,25 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Add an interceptor to handle responses and check for invalid token
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response; // If the response is successful, return it
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Token is invalid or expired, redirect to the login page
+      if (typeof window !== "undefined") {
+        // localStorage.clear();
+        window.location.href = "/login";
+        toast("Session timed out, Please login agian")
+        
+      }
+    }
+    return Promise.reject(error); // Return any other errors
+  }
+);
+
 
 export default axiosInstance;

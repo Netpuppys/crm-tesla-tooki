@@ -22,9 +22,9 @@ const LogOutButton = () => {
   const navigate = useNavigate()
 
   const handleLogOut = () => {
-    sessionStorage.clear()
     localStorage.clear()
-    navigate("/")
+    navigate("/login")
+    sessionStorage.clear()
   }
 
   return(
@@ -38,8 +38,7 @@ const LogOutButton = () => {
 }
 
 function App() {
-  // const loggedIn = sessionStorage.getItem("logged")
-  const [ loggedIn, setLoggedIn ] = useState(sessionStorage.getItem("logged")) 
+  const [ loggedIn, setLoggedIn ] = useState(localStorage.getItem("logged")) 
   const [ userData, setUserData ] = useState(JSON.parse(sessionStorage.getItem("userData")))
 
   return (
@@ -50,7 +49,13 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Navigate to="/login" />} />
-          <Route path='/login' element={<LoginPage setLoggedIn={setLoggedIn} setUserData={setUserData} />} />
+          <Route 
+            path='/login' 
+            element={
+              <LoginPage setLoggedIn={setLoggedIn} setUserData={setUserData} />
+              // : <Navigate to={"/analytics"} />
+            } 
+            />
           {!loggedIn && <Route path="*" element={<Navigate to="/login" />} />}
         </Routes>
 
@@ -73,6 +78,7 @@ function App() {
                   <Route path='/' element={<Navigate to="/login" />} />
                   <Route path='/contact-us' element={<ContactUsPage />} />
                   <Route path='/feedback' element={<FeedBackPage />} />
+
                   <Route path='/analytics' element={<AnalyticsPage />} /> 
                   <Route path='/Driver-addition' element={<DriverAddition />} /> 
                   <Route path='/driver-list' element={<DriverAdditionPage />} /> 
