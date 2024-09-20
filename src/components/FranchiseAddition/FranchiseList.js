@@ -20,11 +20,6 @@ const FranchiseList = () => {
 
         <div className='w-full mt-10 h-10 flex items-center justify-between'>
           <div className='h-10 flex items-center gap-4'>
-            {/* <button
-              className='px-16 rounded-full h-full flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF]'
-            >
-              Filter
-            </button> */}
             <select
               value={filterArea}
               onChange={e => setFilterArea(e.target.value)}
