@@ -9,7 +9,7 @@ const UserDetails = ({
     driverDetails,
     setDriverDetails
 }) => {
-    const { setAlert } = useUserContext()
+    const { setAlert, fetchUsers } = useUserContext()
     const [ editable, setEditable ] = useState(false)
     const [ changedDetails, setChangedDetails ] = useState(driverDetails)
     const [ loader, setLoader ] = useState(false)
@@ -65,6 +65,7 @@ const UserDetails = ({
         .patch(`/all/consumer/${driverDetails.id}/`, data)
         .then(res => {
             console.log(res)
+            fetchUsers()
             setDriverDetails(changedDetails)
             setAlert("Changed Successfully")
         })

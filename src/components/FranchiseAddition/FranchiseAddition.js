@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import "../../styles/components/Communities/Communities.css";
 import axiosInstance from 'utils/AxiosInstance';
 import DriverList from './DriverTable';
 import { useUserContext } from 'globalComponents/AppContext';
 import majorCities from 'globalComponents/data/majorCities';
+import "../../styles/components/Communities/Communities.css";
 
 const initialFormState = { 
     username: "",
@@ -12,19 +12,23 @@ const initialFormState = {
     last_name: "", 
     email: "", 
     phone_number: "", 
-    noOfPartners: 0, 
+    noOfPartners: 1, 
     city: "",
     area: "", 
     user_type: "franchise",
-    partners: [] 
+    partners: [
+        { name: '', percentage: 15 },
+    ] 
 }
 
 const FranchiseAddition = () => {
     const { driverList, fetchFranchise, setAlert } = useUserContext()
     const [newFranchiseData, setNewFranchiseData] = useState(initialFormState);
-    const [selectedFranchise, setSelectedFranchise] = useState("");
-    const [errors, setErrors] = useState({});
     const [ selectedCity, setSelectedCity ] = useState()
+
+    const totalPercentage = (data) => { 
+        return data.reduce((sum, item) => sum + parseFloat(item.percentage), 0);
+    }
 
     useEffect(() => {
         console.log(newFranchiseData);
@@ -39,17 +43,18 @@ const FranchiseAddition = () => {
 
     const handlePartnerNameChange = (value, index) => {
         const updatedPartners = [...newFranchiseData.partners];
-        updatedPartners[index] = { name: value };
-
+        
+        // Keep the existing percentage and only update the name
+        updatedPartners[index] = {
+            ...updatedPartners[index],
+            name: value
+        };
+    
         setNewFranchiseData(prev => ({
             ...prev,
             partners: updatedPartners
         }));
     };
-
-    // const handleSelectChange = (event) => {
-    //     setSelectedFranchise(event.target.value);
-    // };
 
     const handleCityChange = (event) => {
         setSelectedCity(event.target.value)
@@ -67,47 +72,92 @@ const FranchiseAddition = () => {
     };
 
 
+    // const validation = () => {
+    //     // Validate newFranchiseData fields
+    //     if (!newFranchiseData.first_name) {
+    //         setAlert( "First Name is required")
+    //         return false
+    //     }
+    //     if (!newFranchiseData.last_name) {
+    //         setAlert("Last Name is required")
+    //         return false
+    //     };
+    //     if (!newFranchiseData.email) {
+    //         setAlert("Email is required")
+    //         return false
+    //     } else if (!/^\S+@\S+\.\S+$/.test(newFranchiseData.email)) {
+    //         setAlert("Email is invalid")
+    //         return false
+    //     }
+    //     if (!newFranchiseData.phone_number) {
+    //         setAlert("phone_number Number is required")
+    //         return false
+    //     } else if (!/^\d{10}$/.test(newFranchiseData.phone_number)) {
+    //         setAlert("phone_number Number is invalid")
+    //         return false
+    //     }
+    //     if (!newFranchiseData.password) {
+    //         setAlert("Password is required");
+    //         return;
+    //     } else if (!/^(?=.*\d).{8,}$/.test(newFranchiseData.password)) {
+    //         setAlert("Password must be at least 8 characters long and contain at least 1 number");
+    //         return;
+    //     }
+    //     if (!newFranchiseData.partners.length === 0) {
+    //         setAlert("Partners are mandatory")
+    //         return
+    //     }
+        
+    //     return true
+    // }
+
     const validation = () => {
-        // Validate newFranchiseData fields
-        if (!newFranchiseData.first_name) {
-            setAlert( "First Name is required")
-            return false
+        // Validate top-level fields of newFranchiseData
+        const requiredFields = ["first_name", "last_name", "email", "phone_number", "password", "city", "area"];
+        
+        for (let field of requiredFields) {
+            if (!newFranchiseData[field]) {
+                return `${field.replace("_", " ")} is required`;
+            }
         }
-        if (!newFranchiseData.last_name) {
-            setAlert("Last Name is required")
-            return false
-        };
-        if (!newFranchiseData.email) {
-            setAlert("Email is required")
-            return false
-        } else if (!/^\S+@\S+\.\S+$/.test(newFranchiseData.email)) {
-            setAlert("Email is invalid")
-            return false
-        }
-        if (!newFranchiseData.phone_number) {
-            setAlert("phone_number Number is required")
-            return false
-        } else if (!/^\d{10}$/.test(newFranchiseData.phone_number)) {
-            setAlert("phone_number Number is invalid")
-            return false
-        }
-        if (!newFranchiseData.password) {
-            setAlert("Password is required");
-            return;
-        } else if (!/^(?=.*\d).{8,}$/.test(newFranchiseData.password)) {
-            setAlert("Password must be at least 8 characters long and contain at least 1 number");
-            return;
-        }
-        if (!newFranchiseData.partners.length === 0) {
-            setAlert("Partners are mandatory")
-            return
+    
+        // Specific email and phone number validation
+        if (!/^\S+@\S+\.\S+$/.test(newFranchiseData.email)) {
+            return "Email is invalid";
         }
         
-        return true
-    }
+        if (!/^\d{10}$/.test(newFranchiseData.phone_number)) {
+            return "Phone Number is invalid";
+        }
+        
+        if (!/^(?=.*\d).{8,}$/.test(newFranchiseData.password)) {
+            return "Password must be at least 8 characters long and contain at least 1 number";
+        }
+    
+        // Validate partners array fields
+        if (newFranchiseData.partners.length === 0) {
+            return "At least one partner is required";
+        }
+    
+        for (let i = 0; i < newFranchiseData.partners.length; i++) {
+            const partner = newFranchiseData.partners[i];
+    
+            if (!partner.name) {
+                return `Partner ${i + 1}'s name is required`;
+            }
+    
+            if (!partner.percentage || isNaN(partner.percentage) || partner.percentage <= 0 || totalPercentage(newFranchiseData.partners) !== 15) {
+                return `Partner ${i + 1}'s percentage must be a valid number greater than 0`;
+            }
+        }
+    
+        return true;
+    };    
 
     const handleSubmit = () => {
-        if (!validation()) {
+        const error = validation()
+        if (error !== true) {
+            setAlert(error)
             return
         }
         
@@ -124,30 +174,24 @@ const FranchiseAddition = () => {
             partner_details: newFranchiseData.partners
         }
 
-        // If no errors, proceed with form submission
-        if (Object.keys(errors).length === 0) {
-            console.log("Form submitted successfully");
-            // Perform form submission logic here
-
-            axiosInstance
-                .post("all/adddata/", formData)
-                .then(res => {
-                    console.log(res)
-                    // setNewFranchiseData(initialFormState)
-                    alert("Added Successfully")
-                    fetchFranchise()
-                })
-                .catch(err => {
-                    // console.log(err)
-                    if (err.response.data.data.phone_number) {
-                        setAlert("Phone Number already in use")
-                        return
-                    }
-                    if (err.response.data.data.email) {
-                        setAlert("Email already in use")
-                    }
-                })
-        }
+        axiosInstance
+            .post("all/adddata/", formData)
+            .then(res => {
+                console.log(res)
+                // setNewFranchiseData(initialFormState)
+                alert("Added Successfully")
+                fetchFranchise()
+            })
+            .catch(err => {
+                // console.log(err)
+                if (err.response.data.data.phone_number) {
+                    setAlert("Phone Number already in use")
+                    return
+                }
+                if (err.response.data.data.email) {
+                    setAlert("Email already in use")
+                }
+            })
     }
 
     const handleCount = (next) => {
@@ -157,19 +201,52 @@ const FranchiseAddition = () => {
                 return {
                     ...prev,
                     noOfPartners: newPartnerCount,
-                    partners: [...prev.partners, { name: "" }] // Add an empty partner for each new partner count
+                    // partners: [...prev.partners, { name: "", percentage: 15 / newPartnerCount }] // Add an empty partner for each new partner count
                 };
-            } else if (!next && prev.noOfPartners > 0) {
+            } else if (!next && prev.noOfPartners > 1) {
                 const newPartnerCount = prev.noOfPartners - 1;
                 return {
                     ...prev,
                     noOfPartners: newPartnerCount,
-                    partners: prev.partners.slice(0, -1) // Remove the last partner input when count decreases
+                    // partners: prev.partners.slice(0, -1) // Remove the last partner input when count decreases
                 };
             }
             return prev;
         });
     };
+
+    const HandleAddPartners = () => {
+        setNewFranchiseData(prev => {
+            const noOfPartners = prev.noOfPartners;
+            const percentagePerPartner = Math.round((15 / noOfPartners) * 1000) / 1000;
+    
+            const partnerArr = Array.from({ length: noOfPartners }, () => ({
+                name: "",
+                percentage: percentagePerPartner
+            }));
+    
+            console.log(partnerArr);
+    
+            return {
+                ...prev,
+                partners: partnerArr
+            };
+        });
+    };
+
+    const handleShareChange = (event, index) => {
+        const value = event.target.value;
+        setNewFranchiseData(prev => {
+            const updatedPartners = [...prev.partners];
+            updatedPartners[index].percentage = parseFloat(value);
+    
+            return {
+                ...prev,
+                partners: updatedPartners
+            };
+        });
+    };
+    
     
     return (
         <div className='w-full px-12 pt-5 text-left'>
@@ -196,13 +273,6 @@ const FranchiseAddition = () => {
                         value={newFranchiseData.last_name}
                         onChange={e => handleInputChange(e.target.value, "last_name")}
                     />
-                    {/* <input
-                        type='text'
-                        placeholder='User Name'
-                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[27%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
-                        value={newFranchiseData.username}
-                        onChange={e => handleInputChange(e.target.value, "username")}
-                    /> */}
                     <input
                         type='email'
                         placeholder='Email ID'
@@ -215,7 +285,14 @@ const FranchiseAddition = () => {
                         placeholder='Contact Number'
                         className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[35%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                         value={newFranchiseData.phone_number}
-                        onChange={e => handleInputChange(e.target.value, "phone_number")}
+                        onChange={e => {
+                            const value = e.target.value;
+                            // Only update if value is less than or equal to 10 digits
+                            if (value.length <= 10) {
+                                handleInputChange(value, "phone_number");
+                            }
+                        }}
+                        maxLength={10} // Note: maxLength does not work with type='number'
                     />
                     <input
                         type='text'
@@ -236,29 +313,32 @@ const FranchiseAddition = () => {
                         ))}
                     </select>
                     <div className='w-[45%] h-12 flex items-center justify-start gap-4'>
-                        <p className='text-[#888888] h-full w-full rounded-full bg-[#FFE3D7] flex items-center justify-start px-6'>
+                        <p className='text-[#888888] h-full w-1/2 rounded-full bg-[#FFE3D7] flex items-center justify-start px-6'>
                             {newFranchiseData.noOfPartners ? newFranchiseData.noOfPartners : "Number of Partners"}
                         </p>
                         <button
                             onClick={() => handleCount(false)}
-                            className='h-full aspect-square rounded-xl bg-[#FFE3D7] flex items-center justify-center text-2xl'
+                            className={`h-full aspect-square rounded-xl flex items-center text-white justify-center text-2xl
+                            ${newFranchiseData.noOfPartners>1? "bg-[#F76C2E] bg-opacity-90" : "bg-[#FFE3D7]"}
+                            `}
                         >
                             -
                         </button>
                         <button
                             onClick={() => handleCount(true)}
-                            className='h-full aspect-square rounded-xl bg-[#F76C2E] flex items-center justify-center text-2xl'
+                            className={`h-full aspect-square rounded-xl flex items-center text-white justify-center text-2xl
+                            ${newFranchiseData.noOfPartners<5? "bg-[#F76C2E] bg-opacity-90" : "bg-[#FFE3D7]"}
+                            `}
                         >
                             +
                         </button>
+                        <button
+                            onClick={HandleAddPartners}
+                            className='h-full w-40 rounded-xl text-white bg-[#F76C2E] bg-opacity-90 flex items-center justify-center t'
+                        >
+                            Add Details
+                        </button>
                     </div>
-                    {/* <input
-                        type='text'
-                        placeholder='City'
-                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[45%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
-                        value={newFranchiseData.city}
-                        onChange={e => handleInputChange(e.target.value, "city")}
-                    /> */}
                     <select
                         value={newFranchiseData.city}
                         onChange={handleAreaChange}
@@ -273,32 +353,62 @@ const FranchiseAddition = () => {
                 </div>
 
                 {/* Dynamically render input fields for each partner */}
-                {newFranchiseData.noOfPartners !== 0 &&
-                    <div className='w-full flex flex-row items-start justify-start flex-wrap gap-x-6 gap-y-8 pt-8'>
-                        {newFranchiseData.partners.map((partner, index) => (
+                {newFranchiseData.partners.length > 0 &&
+                    <div className='w-full flex flex-row items-start justify-start flex-wrap gap-x-6 gap-y-4 pt-14'>
+                        <div className='mb-2 w-full flex flex-col items-start justify-start gap-2'>
+                            <p 
+                                className={`${(totalPercentage(newFranchiseData.partners) === 15)? "bg-green-600" : "bg-red-600"} text-nowrap bg-opacity-80 min-w-56 w-fit font-medium text-white h-10 flex items-center justify-center rounded-full px-6`}
+                            >
+                                Total Percentage:
+                                <span className='pl-1'>
+                                    {!isNaN(totalPercentage(newFranchiseData.partners)) ? totalPercentage(newFranchiseData.partners) : 0}%
+                                </span>
+                            </p>
+                            <p className='text-slate-500 text-opacity-50 text-sm pl-3'>
+                                note: Total Percentage should be 15%
+                            </p>
+                        </div>
+
+                        <div className='w-full flex flex-row items-start justify-start flex-wrap gap-x-10 gap-y-8'>
+                            {newFranchiseData.partners.map((partner, index) => (
                             <div className='w-[45%] h-fit relative'>
-                                <input
-                                    key={index}
-                                    type='text'
-                                    placeholder={`Partner ${index + 1} Name`}
-                                    className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-full px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
-                                    value={partner.name}
-                                    onChange={e => handlePartnerNameChange(e.target.value, index)}
-                                />
-                                <p className='absolute -translate-y-1/2 top-1/2 right-4 text-sm font-semibold text-[#FF6B17]'>
-                                    Share: {newFranchiseData.noOfPartners > 0 
-                                        ? (Math.round((15 / newFranchiseData.noOfPartners) * 1000) / 1000) 
-                                        : "N/A"}%
+                                <p className='text-[#ff5c00] pl-4'>
+                                    Partner {index + 1} Name
                                 </p>
-                            </div>
-                        ))}
+                                
+                                <div className='w-full flex items-center justify-between'>
+                                    <input
+                                        key={index}
+                                        type='text'
+                                        placeholder='Name'
+                                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-1/2 px-6 placeholder:font-medium focus:outline-none'
+                                        value={partner.name}
+                                        onChange={e => handlePartnerNameChange(e.target.value, index)}
+                                    />
+                                    
+                                    <div className='text-sm w-1/2 font-semibold pl-4 relative text-[#FF6B17] flex items-center justify-center'>
+                                    <p className='pr-3'>Share:</p>
+                                        <input
+                                            type='number'
+                                            className=' focus:outline-none text-sm w-full font-semibold text-[#FF6B17] border-2 border-[#FF5C00] rounded-full h-12 px-5'
+                                            value={partner.percentage}
+                                            onChange={(e) => handleShareChange(e, index)}
+                                        />
+                                        <span className='absolute top-1/2 -translate-y-1/2 right-3'>
+                                            %
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>))}
+                        </div>
                     </div>
                 }
             </div>
 
             <button
                 onClick={handleSubmit}
-                className='mt-16 px-10 bg-[#36CC29] h-10 flex items-center justify-center rounded-full text-white font-medium'
+                disabled={(validation() !== true)? true : false}
+                className='mt-16 px-10 bg-[#36CC29] disabled:bg-gray-500 h-10 flex items-center justify-center rounded-full text-white font-medium'
             >
                 Submit
             </button>
@@ -312,3 +422,6 @@ const FranchiseAddition = () => {
 };
 
 export default FranchiseAddition;
+
+
+// absolute -translate-y-1/2 top-1/2 right-4

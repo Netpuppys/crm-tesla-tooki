@@ -224,7 +224,7 @@ const TripHistory = ({ data }) => {
   )
 }
 
-const DriverList = ({ driverList, area}) => {
+const DriverList = ({ driverList, area }) => {
   const [ newDriverList, setNewDriverList ] = useState(driverList)
   const [ showTransactions, setShowTransactions ] = useState(false)
   const [ showTripHistory, setShowTripHistory ] = useState(false)

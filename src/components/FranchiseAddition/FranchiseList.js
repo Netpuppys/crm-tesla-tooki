@@ -54,7 +54,10 @@ const FranchiseList = () => {
         </div>
         <div className='w-full mt-5'>
           {franchiseList &&
-          <FranchiseTable franchiseList={franchiseList} area={filterArea && filterArea !== "" && filterArea} />}
+          <FranchiseTable 
+            franchiseList={franchiseList} 
+            area={filterArea && filterArea !== "" && filterArea} 
+          />}
         </div>
     </div>
   )

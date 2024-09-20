@@ -22,16 +22,24 @@ const Login = ({ setLoggedIn, setUserData}) => {
     useEffect(() => {
         const token = localStorage.getItem("access")
         const logged = localStorage.getItem("logged")
+        const refreshToken = localStorage.getItem("refresh")
 
-        if (token && logged) {
-            navigate("/analytics")
-            return
+        if (token && logged && refreshToken) {
+            axiosInstance
+            .post("/refresh", { refresh: refreshToken })
+            .then(res => {
+                console.log(res)
+                localStorage.setItem("access", res.data.access)
+                navigate("/analytics")
+            })
+            .catch(err => {
+                localStorage.clear()
+                localStorage.setItem("logged", false)
+                sessionStorage.setItem("userData", null)
+                setLoggedIn(false)
+                console.log(err)
+            })
         }
-
-        localStorage.clear()
-        localStorage.setItem("logged", false)
-        sessionStorage.setItem("userData", null)
-        setLoggedIn(false)
     }, [])
 
     const onSubmit = (data) => {

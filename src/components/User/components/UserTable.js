@@ -3,6 +3,7 @@ import { useUserContext } from 'globalComponents/AppContext';
 import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
+import { ThreeCircles } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
@@ -82,12 +83,12 @@ const DeletePopUp = ({ deleteId, setDeleteId }) => {
 }
 
 const UserTable = ({ driverList, area }) => {
-  console.log(driverList)
   const [ newDriverList, setNewDriverList ] = useState(driverList)
   const [ showTransactions, setShowTransactions ] = useState(false)
   const [ deleteId, setDeleteId ] = useState(null)
   const [ userDetails, setUserDetails ] = useState()
   const [ showDetails, setShowDetails ] = useState(false)
+  const [ loader, setLoader ] = useState(false)
 
   useEffect(() => {
     if (area) {
@@ -100,6 +101,7 @@ const UserTable = ({ driverList, area }) => {
 
   const handleFetchUserDetails = (id) => {
     if (typeof id === "number") {
+      setLoader(true)
       axiosInstance
       .get(`/account/users/${id}/`)
       .then(res => {
@@ -109,6 +111,9 @@ const UserTable = ({ driverList, area }) => {
       })
       .catch(err => {
         console.error(err)
+      })
+      .finally(() => {
+        setLoader(false)
       })
     }
   }
@@ -122,6 +127,13 @@ const UserTable = ({ driverList, area }) => {
       <div className="mb-4">
         <h2 className="text-2xl font-semibold text-gray-800">User List</h2>
       </div>
+
+      {loader &&
+      <div className='w-screen h-screen fixed top-0 left-0 backdrop-blur-sm flex items-center justify-center'>
+        <ThreeCircles
+          color='#ea580c'
+        />
+      </div>}
 
       {showTransactions &&
       <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
