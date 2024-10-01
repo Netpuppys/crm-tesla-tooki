@@ -154,32 +154,6 @@ form{
 
 .login-main-div
 .bottom-buttons
-.checkbox-div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.login-main-div
-.bottom-buttons
-.checkbox-div
-.remember-checkbox{
-    width: 1.7rem;
-    height: 1.7rem;
-
-    background-color: #00C50A;
-}
-
-.login-main-div
-.bottom-buttons
-.checkbox-div
-.remember-text{
-    color: #525252;
-}
-
-.login-main-div
-.bottom-buttons
 .forgot-btn{
     background-color: transparent;
     border: none;
@@ -193,6 +167,7 @@ form{
     cursor: pointer;
     margin-bottom: 1rem;
     width: 100%;
+    max-width: 25rem;
     height: 3rem;
 
     display: flex;

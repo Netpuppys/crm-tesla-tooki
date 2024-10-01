@@ -52,8 +52,10 @@ function App() {
           <Route 
             path='/login' 
             element={
-              <LoginPage setLoggedIn={setLoggedIn} setUserData={setUserData} />
-              // : <Navigate to={"/analytics"} />
+              <LoginPage 
+                setLoggedIn={setLoggedIn} 
+                setUserData={setUserData} 
+              />
             } 
             />
           {!loggedIn && <Route path="*" element={<Navigate to="/login" />} />}

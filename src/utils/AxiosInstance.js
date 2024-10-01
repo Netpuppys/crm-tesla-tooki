@@ -44,6 +44,7 @@ axiosInstance.interceptors.response.use(
       if (typeof window !== "undefined") {
         // localStorage.clear();
         window.location.href = "/login";
+        localStorage.clear()
         toast("Session timed out, Please login agian")
         
       }
