@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom"
-import { IoClose } from "react-icons/io5";
 import { MdCloudUpload } from "react-icons/md";
-import { IoCloudDoneOutline } from "react-icons/io5";
-import RedButton from 'globalComponents/ui/RedButton';
-// import userData from 'userDummyData';
+import { IoClose, IoCloudDoneOutline } from "react-icons/io5";
 import "../../styles/components/DriverAddition/DriverAddition.css"
 import axiosInstance from 'utils/AxiosInstance';
-import { FaCamera } from 'react-icons/fa';
 import { useUserContext } from 'globalComponents/AppContext';
 import { ThreeDots } from 'react-loader-spinner';
 import majorCities from 'globalComponents/data/majorCities';
 
-const DriverAddition = () => {
+const DriverAddition = ({ setShowDriverAddition }) => {
     const { setAlert, fetchDrivers } = useUserContext()
     const location = useLocation()
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
@@ -175,7 +171,14 @@ const DriverAddition = () => {
     };
 
     return (
-        <div className='driver-add-main-div'>
+        <div className='driver-add-main-div relative'>
+            <button
+                onClick={() => setShowDriverAddition(false)}
+                className='absolute top-0 right-10 gap-2 px-10 border-2 border-[#FFE3CF] hover:border-orange-600 hover:border-opacity-50 rounded-full h-10 flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF]'
+            >
+                Close <IoClose />
+            </button>
+
             <p className='page-title'>Driver Addition</p>
             <p className='sub-title'>Add New Driver</p>
 

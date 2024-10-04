@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 
 // Function to check if the request URL is for login or signup
 const isLoginOrSignupRequest = (url) => {
-  return url.includes('/login') || url.includes('/signup') || url.includes('/register');;
+  return url.includes('/login') || url.includes('/signup') || url.includes('/register');
 };
 
 // Add an interceptor for setting the Authorization header with the access token

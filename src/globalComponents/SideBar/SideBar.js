@@ -19,14 +19,14 @@ const sideBarItems = [
             { icon: <MdAnalytics />, label: "Drivers Addition", link: "/driver-addition" },
         ]
     },
-    {
-        label: "others",
-        items: [
-            { icon: <MdAnalytics />, label: "feedback", link: "/feedback" },
-            { icon: <MdAnalytics />, label: "contact us", link: "/contact-us" },
-            // { icon: <MdAnalytics />, label: "help", link: "/" },
-        ]
-    },
+    // {
+    //     label: "others",
+    //     items: [
+    //         { icon: <MdAnalytics />, label: "feedback", link: "/feedback" },
+    //         { icon: <MdAnalytics />, label: "contact us", link: "/contact-us" },
+    //         // { icon: <MdAnalytics />, label: "help", link: "/" },
+    //     ]
+    // },
 ]
 
 const SideBar = () => {
@@ -54,9 +54,9 @@ const SideBar = () => {
         <div className='main-content-sidebar'>
             {sideBarItems.map((menu, index) => (
                 <div className='main-menu-div' key={index}>
-                    <p className='menu-title'>
+                    {/* <p className='menu-title'>
                         {menu.label}
-                    </p>
+                    </p> */}
                     <div className='menu-items-div'>
                         {menu.items.map((item, id) => (
                             <Link 

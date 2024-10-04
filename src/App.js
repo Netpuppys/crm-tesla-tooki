@@ -1,5 +1,8 @@
 import './App.css';
+import { useState } from 'react';
+import { UserProvider } from 'globalComponents/AppContext';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+
 import SideBar from './globalComponents/SideBar/SideBar';
 import AnalyticsPage from './pages/AnalyticsPage';
 import NavBar from './globalComponents/navbar/NavBar';
@@ -8,15 +11,13 @@ import ContactUsPage from 'pages/ContactUsPage';
 import FeedBackPage from 'pages/FeedBackPage';
 import CommunitiesPage from 'pages/CommunitiesPage';
 import CreateNewAdmin from 'components/AdminManagement/CreateNewAdmin';
-import { useState } from 'react';
-import DriverAdditionPage from 'pages/DriverAdditionPage';
 import LoginPage from 'pages/LoginPage';
-import { UserProvider } from 'globalComponents/AppContext';
 import FranchiseAdditionPage from 'pages/FranchiseAdditionPage';
-import DriverAddition from 'components/DriverAddition/DriverAddition';
 import FranchiseList from 'components/FranchiseAddition/FranchiseList';
 import UserListPage from 'components/User/UserListPage';
 import Alert from 'globalComponents/ui/Alert';
+import DriverListPage from 'pages/DriverListPage';
+import DriverAdditionPage from 'pages/DriverAdditionPage';
 
 const LogOutButton = () => {
   const navigate = useNavigate()
@@ -82,8 +83,8 @@ function App() {
                   <Route path='/feedback' element={<FeedBackPage />} />
 
                   <Route path='/analytics' element={<AnalyticsPage />} /> 
-                  <Route path='/Driver-addition' element={<DriverAddition />} /> 
-                  <Route path='/driver-list' element={<DriverAdditionPage />} /> 
+                  <Route path='/Driver-addition' element={<DriverAdditionPage />} /> 
+                  <Route path='/driver-list' element={<DriverListPage />} /> 
                   <Route path='/franchise-list' element={<FranchiseList />} /> 
                   <Route path='/user-list' element={<UserListPage />} /> 
                   <Route path='/admin-management' element={<AdminManagementPage />} /> 

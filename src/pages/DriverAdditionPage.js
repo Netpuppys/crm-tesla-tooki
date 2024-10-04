@@ -1,64 +1,67 @@
-import React, { useState } from 'react'
 import DriverAddition from 'components/DriverAddition/DriverAddition'
-import UserTable from 'components/AdminManagement/components/UserTable'
-import { Link } from 'react-router-dom'
-import DriverList from 'components/FranchiseAddition/DriverTable'
-import { useUserContext } from 'globalComponents/AppContext'
-import { IoClose } from 'react-icons/io5'
-import majorCities from 'globalComponents/data/majorCities'
+import DriverAdditionTable from 'components/DriverAddition/DriverAdditionTable'
+import React, { useEffect, useState } from 'react'
+import { ThreeCircles } from 'react-loader-spinner'
+import axiosInstance from 'utils/AxiosInstance'
 
 const DriverAdditionPage = () => {
-  const { driverList } = useUserContext()
+    const [ showDriverAddition, setShowDriverAddition ] = useState(false)
+    const [ driverList, setDriverList ] = useState([])
+    const [ loader, setLoader ] = useState(false)
 
-  const [ filterArea, setFilterArea ] = useState("")
-  
+    const handleFetch = () => {
+        setLoader(true)
+
+        axiosInstance
+        .get("all/driversignupstatus/")
+        .then(res => {
+            console.log(res)
+            setDriverList(res.data)
+        })
+        .catch(err => {
+            console.err(err)
+        })
+        .finally(() => {
+            setLoader(false)
+        })
+    }
+
+    useEffect(() => {
+        handleFetch()
+    }, [])
+
   return (
-    <div className='w-full text-left px-14 pt-5'>
-        <p className='text-xl font-medium text-[#1F384C]'>
-          All Drivers
-        </p>
+    <div className='w-full min-h-full text-left px-14 py-10'>
+        {showDriverAddition && <DriverAddition setShowDriverAddition={setShowDriverAddition} />}
 
-        <div className='w-full mt-10 h-10 flex items-center justify-between'>
-          <div className='h-10 flex items-center gap-4'>
-            <select
-              value={filterArea}
-              onChange={e => setFilterArea(e.target.value)}
-              className='w-40 rounded-full text-center focus:outline-none h-full flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF]'
-            >
-              <option value="">Area</option>
-              {majorCities.map(city => (
-                  <option key={city.name} value={city.name}>{city.name}</option>
-              ))}
-            </select>
+        {loader && 
+        <div className='w-screen h-screen fixed top-0 left-0 z-50 flex items-center justify-center backdrop-blur-sm'>
+            <ThreeCircles color='#ea580c' />
+        </div>}
 
-            {filterArea &&
-            <p
-              className='w-32 relative rounded-full h-full flex items-center justify-center text-[#FF5C00] text-sm bg-transparent border-2 border-[#FFE3CF]'
-            >
-              {filterArea}
-              
-              <span
-                onClick={() => setFilterArea("")}
-                className='absolute -top-1 text-white p-1 -right-1 bg-[#ffb885] rounded-full flex items-center justify-center'>
-                <IoClose />
-              </span>
-            </p>}
-          </div>
+        {!showDriverAddition &&
+        <div className='w-full h-full'>
+            <div className='w-full flex items-center justify-between'>
+                <p className='mb-14 text-[#1f384c] text-xl tracking-[0.5px] font-medium'>
+                    Driver Addition
+                </p>
+                <button
+                    onClick={() => setShowDriverAddition(true)}
+                    className='px-16 rounded-full h-10 border-2 border-[#FFE3CF] hover:border-orange-600 hover:border-opacity-50 flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF]'
+                >
+                    Add New Driver +
+                </button>
+            </div>
 
-          <Link
-            to={"/driver-addition"}
-            className='px-16 rounded-full h-full flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF]'
-          >
-            Add New Driver +
-          </Link>
-        </div>
-        <div className='w-full mt-5'>
-          {driverList &&
-          <DriverList 
-            driverList={driverList} 
-            area={filterArea && filterArea !== "" && filterArea} 
-          />}
-        </div>
+            <div className='mt-10'>
+                {!loader &&
+                <DriverAdditionTable
+                    driverList={driverList}
+                    handleFetch={handleFetch}
+                    setLoader={setLoader}
+                />}
+            </div>
+        </div>}
     </div>
   )
 }
