@@ -6,12 +6,20 @@ const defaultProfilePhoto = "https://via.placeholder.com/150"
 
 const ViewPoliceVerification = ({ image, setPoliceVerificationImage }) => {
   return (
-    <div onClick={() => setPoliceVerificationImage(null)} className='w-screen px-40 h-screen fixed top-0 py-60 left-0 z-50 backdrop-blur-sm flex items-center justify-center'>
-      <img
-        src={image}
-        className='w-full h-full object-cover rounded-2xl'
-        alt='police verification'
-      />
+    <div className='w-screen px-40 h-screen fixed top-0 py-40 left-0 z-50 backdrop-blur-sm flex items-center justify-center'>
+      <div className='h-full z-10 aspect-square bg-white bg-opacity-80 rounded-3xl relative border-orange-600 border-2 p-6 overflow-hidden flex items-center justify-start'>
+        <button
+          onClick={() => setPoliceVerificationImage(null)}
+          className='text-lg px-3 absolute top-3 right-3 text-orange-600 border-[1.5px] border-orange-600 hover:bg-opacity-10 bg-orange-600 bg-opacity-20 backdrop-blur-sm rounded-full  '
+        >
+          close
+        </button>
+        <img
+          src={image}
+          className='w-full h-full shadow-md object-contain rounded-2xl'
+          alt='police verification'
+        />
+      </div>
     </div>
   )
 }
@@ -48,6 +56,15 @@ const DriverAdditionTable = ({ driverList, area, handleFetch, setLoader }) => {
         setLoader(false)
       })
     }
+  }
+
+  const handleShowImage = (image) => {
+    if (!image) {
+      setAlert("Image not Uploaded")
+      return
+    }
+
+    setPoliceVerificationImage(image)
   }
 
   return (
@@ -104,7 +121,7 @@ const DriverAdditionTable = ({ driverList, area, handleFetch, setLoader }) => {
                 </td>
 
                 <td className="px-2 pr-4 py-4 text-orange-600 text-center">
-                  <button onClick={() => setPoliceVerificationImage(driver.police_verification_letter)} className='text-orange-600 underline'>
+                  <button onClick={() => handleShowImage(driver.police_verification_letter)} className='text-orange-600 underline'>
                     View
                   </button>
                 </td>
