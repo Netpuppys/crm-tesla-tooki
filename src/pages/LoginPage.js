@@ -14,7 +14,7 @@ const Login = ({ setLoggedIn, setUserData}) => {
     const navigate = useNavigate()
 
     const { setAlert } = useUserContext()
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { register, handleSubmit, formState: { errors }, trigger } = useForm()
 
     const [ showPassword, setShowPassword] = useState(false)
     const [ loader, setLoader ] = useState(false)
@@ -55,6 +55,21 @@ const Login = ({ setLoggedIn, setUserData}) => {
             })
         }
     }, [])
+
+    // Handle Enter key press to trigger form submission
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Enter') {
+                trigger(); // Validates form
+                document.querySelector('form').dispatchEvent(new Event('submit')); // Triggers submit
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [trigger]);
 
     const onSubmit = (data) => {
         setLoader(true)
@@ -165,12 +180,12 @@ const Login = ({ setLoggedIn, setUserData}) => {
                     </div>
 
                     <div className='w-full flex max-w-[25rem] items-center justify-between mb-2 -mt-3'>
-                        <button
+                        <span
                             onClick={() => setOtpLogin(true)}
                             className='underline cursor-pointer text-xs text-orange-600'
                         >
                             sign in with otp
-                        </button>
+                        </span>
                         <span
                             onClick={() => setForgotPass(true)}
                             className='text-gray-600 text-opacity-70'
