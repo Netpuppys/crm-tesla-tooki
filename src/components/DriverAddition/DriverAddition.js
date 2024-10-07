@@ -213,7 +213,7 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                         onChange={e => handleInputChange(e.target.value, "email")}
                     />
                     <input
-                        type='number'
+                        type='tel'
                         placeholder='Mobile Number'
                         className='community-input email-input'
                         value={newAdmin.mobile}

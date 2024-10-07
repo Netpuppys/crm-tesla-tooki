@@ -155,7 +155,7 @@ const DriverDetails = ({
             <div className='w-1/2 flex flex-col px-2'>
                 <label className='text-sm text-orange-600 font-medium mb-1'>Phone Number: </label>
                 <input
-                    type="text"
+                    type="tel"
                     disabled={!editable}
                     className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
                     name="phone_number" 

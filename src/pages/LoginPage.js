@@ -214,7 +214,7 @@ const Login = ({ setLoggedIn, setUserData}) => {
                                 +91
                             </div>
                             <input  
-                                type='number'
+                                type='tel'
                                 disabled={loader}
                                 className='bg-orange-600 px-4 w-full h-full focus:outline-none bg-opacity-20 rounded-xl border-2 border-orange-600 border-opacity-40'
                                 placeholder='eg: 888-999-0000'

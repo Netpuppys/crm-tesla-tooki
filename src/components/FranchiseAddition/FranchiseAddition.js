@@ -71,46 +71,6 @@ const FranchiseAddition = () => {
         }));
     };
 
-
-    // const validation = () => {
-    //     // Validate newFranchiseData fields
-    //     if (!newFranchiseData.first_name) {
-    //         setAlert( "First Name is required")
-    //         return false
-    //     }
-    //     if (!newFranchiseData.last_name) {
-    //         setAlert("Last Name is required")
-    //         return false
-    //     };
-    //     if (!newFranchiseData.email) {
-    //         setAlert("Email is required")
-    //         return false
-    //     } else if (!/^\S+@\S+\.\S+$/.test(newFranchiseData.email)) {
-    //         setAlert("Email is invalid")
-    //         return false
-    //     }
-    //     if (!newFranchiseData.phone_number) {
-    //         setAlert("phone_number Number is required")
-    //         return false
-    //     } else if (!/^\d{10}$/.test(newFranchiseData.phone_number)) {
-    //         setAlert("phone_number Number is invalid")
-    //         return false
-    //     }
-    //     if (!newFranchiseData.password) {
-    //         setAlert("Password is required");
-    //         return;
-    //     } else if (!/^(?=.*\d).{8,}$/.test(newFranchiseData.password)) {
-    //         setAlert("Password must be at least 8 characters long and contain at least 1 number");
-    //         return;
-    //     }
-    //     if (!newFranchiseData.partners.length === 0) {
-    //         setAlert("Partners are mandatory")
-    //         return
-    //     }
-        
-    //     return true
-    // }
-
     const validation = () => {
         // Validate top-level fields of newFranchiseData
         const requiredFields = ["first_name", "last_name", "email", "phone_number", "password", "city", "area"];
@@ -281,7 +241,7 @@ const FranchiseAddition = () => {
                         onChange={e => handleInputChange(e.target.value, "email")}
                     />
                     <input
-                        type='number'
+                        type='tel'
                         placeholder='Contact Number'
                         className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[35%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                         value={newFranchiseData.phone_number}
