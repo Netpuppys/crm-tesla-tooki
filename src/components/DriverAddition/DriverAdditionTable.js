@@ -1,6 +1,9 @@
+
 import { useUserContext } from 'globalComponents/AppContext';
 import React, { useEffect, useState } from 'react';
+import { MdDeleteForever } from 'react-icons/md';
 import axiosInstance from 'utils/AxiosInstance';
+import RequestDeletePopUp from './RequestDeletePopUp';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
@@ -28,6 +31,7 @@ const DriverAdditionTable = ({ driverList, area, handleFetch, setLoader }) => {
   const { setAlert } = useUserContext()
   const [ newDriverList, setNewDriverList ] = useState(driverList)
   const [ policeVerificationImage, setPoliceVerificationImage ] = useState(null)
+  const [ deleteId, setDeleteId ] = useState(null)
 
   useEffect(() => {
     if (area) {
@@ -70,6 +74,15 @@ const DriverAdditionTable = ({ driverList, area, handleFetch, setLoader }) => {
   return (
     <div className="w-full px-4 py-6 relative">
 
+      {deleteId &&
+      <div onClick={() => setDeleteId(null)} className='w-screen h-screen backdrop-blur-sm fixed top-0 left-0 z-[999] flex items-center justify-center'>
+        <RequestDeletePopUp
+          deleteId={deleteId}
+          setDeleteId={setDeleteId}
+          setNewDriverList={setNewDriverList}
+        />
+      </div>}
+
       {policeVerificationImage &&
       <ViewPoliceVerification image={policeVerificationImage} setPoliceVerificationImage={setPoliceVerificationImage} />}
 
@@ -104,7 +117,7 @@ const DriverAdditionTable = ({ driverList, area, handleFetch, setLoader }) => {
                   />
                   <div>
                     <p className="font-semibold text-orange-600">{driver.first_name} {driver?.last_name}</p>
-                    {/* <p className="text-green-500">{driver.area || "N/A"}</p> */}
+                    <p className="text-green-500">{driver.area || "N/A"}</p>
                   </div>
                 </td>
 
@@ -131,9 +144,9 @@ const DriverAdditionTable = ({ driverList, area, handleFetch, setLoader }) => {
                     <button onClick={() => handleApprove(driver.driver)} className='bg-green-600  text-xs rounded-full px-3 py-1'>
                       Approve
                     </button>
-                    {/* <button className='bg-red-600 text-xs rounded-full px-3 py-1'>
-                      Decline
-                    </button> */}
+                    <button onClick={() => setDeleteId(driver.driver)} className=' text-xl rounded-full hover:bg-gray-700 hover:bg-opacity-10 p-1 cursor-pointer text-black text-opacity-50'>
+                      <MdDeleteForever />
+                    </button>
                   </div>
                 </td>
               </tr>
