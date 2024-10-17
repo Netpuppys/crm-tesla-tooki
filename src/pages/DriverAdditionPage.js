@@ -19,7 +19,7 @@ const DriverAdditionPage = () => {
             setDriverList(res.data)
         })
         .catch(err => {
-            console.err(err)
+            console.error(err)
         })
         .finally(() => {
             setLoader(false)

@@ -33,14 +33,14 @@ const Analytics = () => {
 
   return (
     <div className='analytics-main-div min-h-screen'>
-        <div className='filter-div'>
+        {/* <div className='filter-div'>
             <button className='filter-btn'>
                 By ID
             </button>
             <button className='filter-btn'>
                 By Data
             </button>
-        </div>
+        </div> */}
 
         <p className='page-heading'>Analytics</p>
 

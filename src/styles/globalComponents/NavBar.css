@@ -8,7 +8,7 @@
 
     border-bottom: 1px solid #C8CBD9;
     background-color: #fff;
-    z-index: 999;
+    z-index: 60;
 
     position: fixed;
 
@@ -27,7 +27,6 @@
     box-sizing: border-box;
     padding-inline: 18px;
 
-    border-radius: 5px;
     background: #F4FFEF;
 
     display: flex;

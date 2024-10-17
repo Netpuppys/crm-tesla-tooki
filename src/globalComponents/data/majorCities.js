@@ -1,6 +1,7 @@
 const majorCities = [
     { name: "Mumbai", area: ["Mumbai"] },
     { name: "Delhi", area: ["Delhi"] },
+    { name: "Uttar Pradesh", area: ["Banda" , "Badohi", "Jaunpur", 'Pratapgarh' ]},
     { name: "Bengaluru", area: ["K R Puram", "R R Nagar", "Majestic"] },
     { name: "Hyderabad", area: ["Hyderabad"] },
     { name: "Ahmedabad", area: ["Ahmedabad"] },

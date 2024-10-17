@@ -39,14 +39,16 @@ const DriverDetails = ({
         
         // Update nested objects
         if (name.includes('driver_additional_details')) {
-        const [key] = name.split('.');
-        setChangedDetails({
-            ...changedDetails,
-            driver_additional_details: {
-            ...changedDetails.driver_additional_details,
-            [key]: value
-            }
-        });
+            const namesArray = name.split('.');
+            const key = namesArray[namesArray.length-1]
+            console.log(key, value)
+            setChangedDetails(prev => ({
+                ...prev,
+                driver_additional_details: {
+                    ...prev.driver_additional_details,
+                    [key]: value
+                }
+            }));
         } else {
         setChangedDetails({
             ...changedDetails,
@@ -117,6 +119,7 @@ const DriverDetails = ({
                 close
             </button>
         </div>
+        {console.log(changedDetails)}
 
         <div className='w-full flex flex-row flex-wrap items-start justify-start gap-y-6'>
             <div className='w-1/2 flex flex-col px-2'>
@@ -213,8 +216,8 @@ const DriverDetails = ({
                     type="text"
                     disabled={!editable}
                     className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
-                    name="license_no" 
-                    value={changedDetails.driver_additional_details.license_no} 
+                    name="changedDetails.driver_additional_details.license_no" 
+                    value={changedDetails?.driver_additional_details?.license_no}
                     onChange={handleChange} 
                 />
             </div>
@@ -224,8 +227,8 @@ const DriverDetails = ({
                     type="text"
                     disabled={!editable}
                     className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
-                    name="aadhaar_no" 
-                    value={changedDetails.driver_additional_details.aadhaar_no} 
+                    name="changedDetails.driver_additional_details.aadhaar_no"
+                    value={changedDetails?.driver_additional_details?.aadhaar_no}
                     onChange={handleChange} 
                 />
             </div>
@@ -235,8 +238,8 @@ const DriverDetails = ({
                     type="text"
                     disabled={!editable}
                     className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
-                    name="vehicle" 
-                    value={changedDetails.driver_additional_details.vehicle || ''} 
+                    name="changedDetails.driver_additional_details.vehicle" 
+                    value={changedDetails?.driver_additional_details?.vehicle || ''} 
                     onChange={handleChange} 
                 />
             </div>
@@ -246,8 +249,8 @@ const DriverDetails = ({
                     type="text"
                     disabled={!editable}
                     className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
-                    name="vehicle_type" 
-                    value={changedDetails.driver_additional_details.vehicle_type || ''} 
+                    name="changedDetails.driver_additional_details.vehicle_type" 
+                    value={changedDetails?.driver_additional_details?.vehicle_type || ''} 
                     onChange={handleChange} 
                 />
             </div>

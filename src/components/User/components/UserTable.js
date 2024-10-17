@@ -196,7 +196,9 @@ const UserTable = ({ driverList, area }) => {
                   </div>
                 </td>
                 {/* phone number */}
-                <td className="px-4 py-4 text-orange-600">{driver.phone_number}</td>
+                <td className="px-4 py-4 text-orange-600">
+                  {driver.phone_number}
+                </td>
                 {/* email */}
                 <td className="px-4 py-4 text-orange-600">
                   <a href={`mailto:${driver.email}`} className="hover:underline">{driver.email}</a>
@@ -226,28 +228,6 @@ const UserTable = ({ driverList, area }) => {
                     </div>
                   </button>
                 </td>
-                {/* <td className="px-4 py-4 text-right">
-                  <button 
-                    onClick={() => setShowTransactions(true)}
-                    className="bg-orange-100 text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
-                  >
-                    <span>View Previous Transactions</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-5 h-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </td> */}
               </tr>
             ))}
           </tbody>
