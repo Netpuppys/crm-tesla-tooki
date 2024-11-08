@@ -5,7 +5,7 @@ import { IoClose, IoCloudDoneOutline } from "react-icons/io5";
 import "../../styles/components/DriverAddition/DriverAddition.css"
 import axiosInstance from 'utils/AxiosInstance';
 import { useUserContext } from 'globalComponents/AppContext';
-import { ThreeDots } from 'react-loader-spinner';
+import { ThreeCircles, ThreeDots } from 'react-loader-spinner';
 import majorCities from 'globalComponents/data/majorCities';
 
 const DriverAddition = ({ setShowDriverAddition }) => {
@@ -13,13 +13,37 @@ const DriverAddition = ({ setShowDriverAddition }) => {
     const location = useLocation()
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
     const [ userList , setUserList ] = useState()
+    const [ stateList, setStateList ] = useState([])
+    const [ citiesList, setCitiesList ] = useState([])
+    const [ areaList, setAreaList ] = useState([])
     const [ fileUploaded, setFileUploaded ] = useState()
     const [ loader, setLoader ] = useState(false)
+    const [ pageLoader, setPageLoader ] = useState(false)
     const [ selectedCity, setSelectedCity ] = useState()
+    const [ selectedState, setSelectedState ] = useState()
+    const [allCitiesList, setAllCitiesList] = useState([]); // Store all cities initially
 
     useEffect(() => {
-      console.log(fileUploaded)
-  }, [fileUploaded])
+        setPageLoader(true);
+    
+        axiosInstance
+            .get("all/states/")
+            .then(res => {
+                setStateList(res.data);
+                console.log(res.data);
+            })
+            .catch((err) => console.error(err));
+    
+        axiosInstance
+            .get("all/cities/")
+            .then(res => {
+                setAllCitiesList(res.data); // Store all cities data initially
+                console.log(res.data);
+            })
+            .catch((err) => console.error(err))
+
+        setPageLoader(false)
+    }, []);
 
     useEffect(() => {
         const userData = location.state
@@ -30,10 +54,6 @@ const DriverAddition = ({ setShowDriverAddition }) => {
         }
     }, [location])
 
-    useEffect(() => {
-        console.log(newAdmin);
-    }, [newAdmin]);
-
     const handleInputChange = (value, keyName) => {
         setNewAdmin(prev => ({
             ...prev,
@@ -41,18 +61,47 @@ const DriverAddition = ({ setShowDriverAddition }) => {
         }));
     };
 
-    const handleCityChange = (event) => {
-        setSelectedCity(event.target.value)
+    const handleStateChange = (event) => {
+        const selectedState = event.target.value;
+    
         setNewAdmin(prev => ({
             ...prev,
-            area: event.target.value,
+            state: selectedState,
+            city: "",  // Reset city when state changes
+            area: "",  // Reset area when state changes
         }));
+    
+        setSelectedState(selectedState);
+    
+        // Filter cities based on selected state
+        const filteredCities = allCitiesList.filter(city => city.state_id === parseInt(selectedState));
+        setCitiesList(filteredCities);
     };
+    
+    const handleCityChange = (event) => {
+        const selectedCity = event.target.value;
+    
+        setNewAdmin(prev => ({
+            ...prev,
+            city: selectedCity,
+            area: "",  // Reset area when city changes
+        }));
+    
+        setSelectedCity(selectedCity);
+    
+        // Fetch areas for the selected city
+        setPageLoader(true);
+        axiosInstance.get(`all/api/cities/${selectedCity}/areas`)
+            .then(res => setAreaList(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setPageLoader(false));
+    };
+    
 
     const handleAreaChange = (event) => {
         setNewAdmin(prev => ({
             ...prev,
-            city: event.target.value,
+            area: event.target.value,
         }));
     };
 
@@ -128,6 +177,7 @@ const DriverAddition = ({ setShowDriverAddition }) => {
         formData.append('license_no', newAdmin.dL);
         formData.append('aadhaar_no', newAdmin.aadhar);
         formData.append('police_verification_letter', fileUploaded);
+        formData.append('vehicle_type', null);
 
         setLoader(true)
         
@@ -179,6 +229,11 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                 Close <IoClose />
             </button>
 
+            {pageLoader &&
+            <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center backdrop-blur-sm z-[9999]'>
+                <ThreeCircles color='#ea580c' />
+            </div>}
+
             <p className='page-title'>Driver Addition</p>
             <p className='sub-title'>Add New Driver</p>
 
@@ -198,13 +253,6 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                         value={newAdmin.lastName}
                         onChange={e => handleInputChange(e.target.value, "lastName")}
                     />
-                    {/* <input
-                        type='text'
-                        placeholder='Username'
-                        className='community-input email-input'
-                        value={newAdmin.userName}
-                        onChange={e => handleInputChange(e.target.value, "userName")}
-                    /> */}
                     <input
                         type='email'
                         placeholder='Email ID'
@@ -242,34 +290,48 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                         onChange={e => handleInputChange(e.target.value, "aadhar")}
                         onInput={e => e.target.value = e.target.value.slice(0, 12)}
                     />
+
                     <select
-                        value={newAdmin.area}
-                        onChange={handleCityChange}
+                        value={newAdmin.state || ""}
+                        onChange={e => handleStateChange(e)}
                         className='community-input email-input'
                     >
-                         <option value="">Select Area</option>
-                        {majorCities.map(city => (
-                            <option key={city.name} value={city.name}>{city.name}</option>
+                        <option value="">Select State</option>
+                        {stateList?.map(state => (
+                            <option 
+                                key={state.id} 
+                                value={state.id}  // Ensure value is the state ID
+                            >
+                                {state.state}
+                            </option>
                         ))}
                     </select>
                     <select
-                        value={newAdmin.city}
+                        value={newAdmin.city || ""}
+                        onChange={e => handleCityChange(e)}
+                        disabled={!selectedState}
+                        className='community-input email-input'
+                    >
+                        <option value="">Select City</option>
+                        {citiesList.map(city => (
+                            <option key={city.city} value={city.city}>
+                                {city.city}
+                            </option>
+                        ))}
+                    </select>
+
+
+                    <select
+                        value={newAdmin.area}
                         onChange={handleAreaChange}
                         disabled={selectedCity? false : true}
                         className='community-input email-input'
                     >
-                        <option value="">Select City</option>
-                        {majorCities.filter(item => item.name === selectedCity)[0]?.area.map(city => (
-                            <option key={city} value={city}>{city}</option>
+                        <option value="">Select Area</option>
+                        {areaList.map(area => (
+                            <option key={area.area} value={area.area}>{area.area}</option>
                         ))}
                     </select>
-                    {/* <input
-                        type='file'
-                        placeholder='Mobile Number'
-                        className='community-input file-input email-input'
-                        value={newAdmin.policeVerification}
-                        onChange={e => handleInputChange(e.target.value, "policeVerification")}
-                    /> */}
 
                     <div className="community-input file-input email-input file-input-group">
                         <p className='label-file-input'>
@@ -296,18 +358,8 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                         </div>}
                     </div>
                 </div>
-
-                {/* <div className='or-divider'>
-                    <div className='divider'></div>
-                    <div className='divider'></div>
-                </div>
-
-                <div className='take-photo-div'>
-                  <FaCamera />
-                </div> */}
             </div>
 
-            {/* <RedButton text={"Submit"} onClickHandler={handleSubmit}/> */}
             <button
                 onClick={handleSubmit}
                 className='px-8 py-2 text-xm text-white bg-green-600 rounded-full font-semibold'

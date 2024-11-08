@@ -17,6 +17,7 @@ const sideBarItems = [
             // { icon: <MdAnalytics />, label: "Customer Requests", link: "/" },
             { icon: <MdAnalytics />, label: "Franchise Addition", link: "/franchise-addition" },
             { icon: <MdAnalytics />, label: "Drivers Addition", link: "/driver-addition" },
+            { icon: <MdAnalytics />, label: "Management", link: "/management" },
         ]
     },
     // {

@@ -4,6 +4,7 @@ import DriverList from './DriverTable';
 import { useUserContext } from 'globalComponents/AppContext';
 import majorCities from 'globalComponents/data/majorCities';
 import "../../styles/components/Communities/Communities.css";
+import { ThreeCircles } from 'react-loader-spinner';
 
 const initialFormState = { 
     username: "",
@@ -24,7 +25,15 @@ const initialFormState = {
 const FranchiseAddition = () => {
     const { driverList, fetchFranchise, setAlert } = useUserContext()
     const [newFranchiseData, setNewFranchiseData] = useState(initialFormState);
+    const [ userList , setUserList ] = useState()
+    const [ stateList, setStateList ] = useState([])
+    const [ citiesList, setCitiesList ] = useState([])
+    const [ areaList, setAreaList ] = useState([])
+    const [ fileUploaded, setFileUploaded ] = useState()
+    const [ pageLoader, setPageLoader ] = useState(false)
     const [ selectedCity, setSelectedCity ] = useState()
+    const [ selectedState, setSelectedState ] = useState()
+    const [allCitiesList, setAllCitiesList] = useState([]);
 
     const totalPercentage = (data) => { 
         return data.reduce((sum, item) => sum + parseFloat(item.percentage), 0);
@@ -33,6 +42,27 @@ const FranchiseAddition = () => {
     useEffect(() => {
         console.log(newFranchiseData);
     }, [newFranchiseData]);
+
+    useEffect(() => {
+        setPageLoader(true);
+    
+        axiosInstance
+            .get("all/states/")
+            .then(res => {
+                setStateList(res.data);
+                console.log(res.data);
+            })
+            .catch((err) => console.error(err));
+    
+        axiosInstance
+            .get("all/cities/")
+            .then(res => {
+                setAllCitiesList(res.data); // Store all cities data initially
+                console.log(res.data);
+            })
+            .catch((err) => console.error(err))
+            .finally(() => setPageLoader(false));
+    }, []);
 
     const handleInputChange = (value, keyName) => {
         setNewFranchiseData(prev => ({
@@ -56,20 +86,64 @@ const FranchiseAddition = () => {
         }));
     };
 
+    const handleStateChange = (event) => {
+        const selectedState = event.target.value;
+    
+        setNewFranchiseData(prev => ({
+            ...prev,
+            state: selectedState,
+            city: "",  // Reset city when state changes
+            area: "",  // Reset area when state changes
+        }));
+    
+        setSelectedState(selectedState);
+    
+        // Filter cities based on selected state
+        const filteredCities = allCitiesList.filter(city => city.state_id === parseInt(selectedState));
+        setCitiesList(filteredCities);
+    };
+
+    // const handleCityChange = (event) => {
+    //     setSelectedCity(event.target.value)
+    //     setNewFranchiseData(prev => ({
+    //         ...prev,
+    //         area: event.target.value,
+    //     }));
+    // };
+
     const handleCityChange = (event) => {
-        setSelectedCity(event.target.value)
+        const selectedCity = event.target.value;
+    
+        setNewFranchiseData(prev => ({
+            ...prev,
+            city: selectedCity,
+            area: "",  // Reset area when city changes
+        }));
+    
+        setSelectedCity(selectedCity);
+    
+        // Fetch areas for the selected city
+        setPageLoader(true);
+        axiosInstance.get(`all/api/cities/${selectedCity}/areas`)
+            .then(res => setAreaList(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setPageLoader(false));
+    };
+
+    // const handleAreaChange = (event) => {
+    //     setNewFranchiseData(prev => ({
+    //         ...prev,
+    //         city: event.target.value,
+    //     }));
+    // };
+
+    const handleAreaChange = (event) => {
         setNewFranchiseData(prev => ({
             ...prev,
             area: event.target.value,
         }));
     };
 
-    const handleAreaChange = (event) => {
-        setNewFranchiseData(prev => ({
-            ...prev,
-            city: event.target.value,
-        }));
-    };
 
     const validation = () => {
         // Validate top-level fields of newFranchiseData
@@ -210,6 +284,11 @@ const FranchiseAddition = () => {
     
     return (
         <div className='w-full px-12 pt-5 text-left'>
+            {pageLoader &&
+            <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center backdrop-blur-sm z-[9999]'>
+                <ThreeCircles color='#ea580c' />
+            </div>}
+
             <p className='text-2xl text-[#1F384C] font-medium'>
                 Franchise Addition
             </p>
@@ -263,13 +342,44 @@ const FranchiseAddition = () => {
                     />
                     {/* Select dropdown for Area */}
                     <select
+                        value={newFranchiseData.state || ""}
+                        onChange={e => handleStateChange(e)}
+                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[30%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
+                    >
+                        <option value="">Select State</option>
+                        {stateList?.map(state => (
+                            <option 
+                                key={state.id} 
+                                value={state.id}  // Ensure value is the state ID
+                            >
+                                {state.state}
+                            </option>
+                        ))}
+                    </select>
+                    <select
+                        value={newFranchiseData.city || ""}
+                        onChange={e => handleCityChange(e)}
+                        disabled={!selectedState}
+                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[30%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
+                    >
+                        <option value="">Select City</option>
+                        {citiesList.map(city => (
+                            <option key={city.city} value={city.city}>
+                                {city.city}
+                            </option>
+                        ))}
+                    </select>
+
+
+                    <select
                         value={newFranchiseData.area}
-                        onChange={handleCityChange}
-                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[60%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
+                        onChange={handleAreaChange}
+                        disabled={selectedCity? false : true}
+                        className='text-[#FF5C00] border-2 border-[#FF5C00] rounded-full h-12 w-[30%] px-6 placeholder:text-[#ff5c00] placeholder:font-medium focus:outline-none'
                     >
                         <option value="">Select Area</option>
-                        {majorCities.map(city => (
-                            <option key={city.name} value={city.name}>{city.name}</option>
+                        {areaList.map(area => (
+                            <option key={area.area} value={area.area}>{area.area}</option>
                         ))}
                     </select>
                     <div className='w-[45%] h-12 flex items-center justify-start gap-4'>
@@ -299,7 +409,7 @@ const FranchiseAddition = () => {
                             Add Details
                         </button>
                     </div>
-                    <select
+                    {/* <select
                         value={newFranchiseData.city}
                         onChange={handleAreaChange}
                         disabled={selectedCity? false : true}
@@ -309,7 +419,7 @@ const FranchiseAddition = () => {
                         {majorCities.filter(item => item.name === selectedCity)[0]?.area.map(city => (
                             <option key={city} value={city}>{city}</option>
                         ))}
-                    </select>
+                    </select> */}
                 </div>
 
                 {/* Dynamically render input fields for each partner */}
