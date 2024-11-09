@@ -1,9 +1,9 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import axiosInstance from 'utils/AxiosInstance';
 import { useUserContext } from 'globalComponents/AppContext';
 import { ThreeDots } from 'react-loader-spinner';
 
-const AddNewArea = ({ setAddNewArea }) => {
+const AddNewArea = ({ setAddNewArea, fetchStateAndCity }) => {
     const formRef = useRef(null);
     const { setAlert } = useUserContext();
 
@@ -68,6 +68,7 @@ const AddNewArea = ({ setAddNewArea }) => {
                 setStateId(res.data.id)
                 handleFormScroll()
                 setAlert("State Added")
+                fetchStateAndCity()
             })
             .catch(err => {
                 console.error(err)

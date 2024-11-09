@@ -1,11 +1,10 @@
-import majorCities from 'globalComponents/data/majorCities'
 import React, { useEffect, useState } from 'react'
 import AddNewArea from './components/AddNewArea'
 import axiosInstance from 'utils/AxiosInstance'
 import { ThreeDots } from 'react-loader-spinner'
 import { useUserContext } from 'globalComponents/AppContext'
 
-const AddNewCity = ({ stateList, setAddNewCity }) => {
+const AddNewCity = ({ stateList, setAddNewCity, fetchStateAndCity }) => {
   const { setAlert } = useUserContext()
   const [ selectedState, setSelectedState ] = useState("")
   const [ cityName, setCityName ] = useState()
@@ -35,6 +34,7 @@ const AddNewCity = ({ stateList, setAddNewCity }) => {
             console.log(res)
             setAlert("City Added")
             setCityName("")
+            fetchStateAndCity()
         })
         .catch(err => {
             console.error(err)
@@ -96,7 +96,7 @@ const AddNewCity = ({ stateList, setAddNewCity }) => {
   )
 }
 
-const AddNewCityArea = ({ stateList, cityList, setAddNewCityArea }) => {
+const AddNewCityArea = ({ stateList, cityList, setAddNewCityArea, fetchStateAndCity }) => {
   const { setAlert } = useUserContext()
   const [ selectedState, setSelectedState ] = useState("")
   const [ stateId, setStateId ] = useState()
@@ -131,6 +131,7 @@ const AddNewCityArea = ({ stateList, cityList, setAddNewCityArea }) => {
             console.log(res)
             setAlert("City Added")
             setAreaName("")
+            fetchStateAndCity()
         })
         .catch(err => {
             console.error(err)
@@ -208,16 +209,64 @@ const AddNewCityArea = ({ stateList, cityList, setAddNewCityArea }) => {
   )
 }
 
-const AreaManagement = () => {
-  const [ stateList, setStateList ] = useState([])
-  const [ expanded, setExpanded ] = useState(false)
-  const [ addNewArea, setAddNewArea ] = useState(false)
-  const [ citiesList, setCitiesList ] = useState([])
-  const [ areasList, setAreasList ] = useState([])
-  const [ addNewCity, setAddNewCity ] = useState(false)
-  const [ addNewCityArea, setAddNewCityArea ] = useState(false)
+const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
+  const [ areaList, setAreaList ] = useState([])
+  const [ loader, setLoader ] = useState(false)
 
   useEffect(() => {
+    if (selectedCity && selectedCity !== "") {
+      setLoader(true)
+
+      axiosInstance
+      .get(`all/api/cities/${selectedCity}/areas`)
+      .then(res => {
+        setAreaList(res.data)
+        console.log(res)
+      })
+      .catch(err => console.error(err))
+      .finally(() => setLoader(false))
+    }
+  }, [selectedCity])
+
+  return (
+    <div className='w-screen h-screen flex items-center justify-center fixed top-0 left-0 backdrop-blur-sm z-[999]'>
+      <div className='w-fit min-w-80 p-6 bg-orange-500 relative bg-opacity-20 z-[9999] px- rounded-xl shadow-3xl border-2 border-orange-600 flex flex-col items-center justify-center gap-5 '>
+        <button
+          onClick={() => setSelectedCity("")}
+          className='absolute z-10 top-2 right-2 text-sm text-[#ea580c] font-bold underline'
+        >
+          close
+        </button>
+        <p className='text-2xl supermercado font-bold text-[#ea580c]'>
+          {selectedCity}
+        </p>
+
+        {loader? 
+        <ThreeDots color='#f97316' /> :
+        <ul className='w-full'>
+          {(areaList && areaList.length>0)? 
+          areaList.map((item, index) => (
+            <li key={index} className='capitalize text-lg mb-2'>{item.area}</li>
+          )) :
+          <p className='text-xl text-center font-semibold text-black text-opacity-70'>
+            No Area's Found
+          </p>
+          }
+        </ul>}
+      </div>
+    </div>
+  )
+}
+
+const AreaManagement = () => {
+  const [ stateList, setStateList ] = useState([])
+  const [ addNewArea, setAddNewArea ] = useState(false)
+  const [ citiesList, setCitiesList ] = useState([])
+  const [ addNewCity, setAddNewCity ] = useState(false)
+  const [ addNewCityArea, setAddNewCityArea ] = useState(false)
+  const [ selectedCity, setSelectedCity ] = useState("")
+ 
+  const fetchStateAndCity = () => {
     axiosInstance
       .get("all/states/")
       .then(res => {
@@ -225,9 +274,7 @@ const AreaManagement = () => {
         console.log(res.data)
       })
       .catch((err) => console.error(err))
-  },[])
 
-  useEffect(() => {
     axiosInstance
       .get("all/cities/")
       .then(res => {
@@ -235,34 +282,11 @@ const AreaManagement = () => {
         console.log(res.data)
       })
       .catch((err) => console.error(err))
-  }, [])
-
-  useEffect(() => {
-    axiosInstance
-      .get("all/areas/")
-      .then(res => {
-        setAreasList(res.data)
-        console.log(res.data)
-      })
-      .catch((err) => console.error(err))
-  }, [])
-
-  const fetchAreas = (city) => {
-    axiosInstance
-      .get(`all/api/cities/${city}/areas`)
-      .then(res => console.log(res))
-      .catch(err => console.error(err))
   }
 
-  // const handleExpand = () => {
-  //   if (expanded === true) {
-  //     setStateList(majorCities.slice(0,3))
-  //     setExpanded(false)
-  //   } else {
-  //     setStateList(majorCities)
-  //     setExpanded(true)
-  //   }
-  // }
+  useEffect(() => {
+    fetchStateAndCity()
+  }, [])
 
   return (
     <div className='w-full pt-5'>
@@ -271,6 +295,7 @@ const AreaManagement = () => {
       <div className='w-screen h-screen z-[999] backdrop-blur-sm fixed top-0 left-0 flex items-center justify-center p-8 '>
         <AddNewArea 
           setAddNewArea={setAddNewArea}
+          fetchStateAndCity={fetchStateAndCity}
         />
       </div>}
 
@@ -278,6 +303,7 @@ const AreaManagement = () => {
       <AddNewCity
         stateList={stateList}
         setAddNewCity={setAddNewCity}
+        fetchStateAndCity={fetchStateAndCity}
       />}
 
       {addNewCityArea &&
@@ -285,6 +311,13 @@ const AreaManagement = () => {
         stateList={stateList}
         cityList={citiesList}
         setAddNewCityArea={setAddNewCityArea}
+        fetchStateAndCity={fetchStateAndCity}
+      />}
+
+      {selectedCity && selectedCity !== "" &&
+      <AreaUnderCity
+        selectedCity={selectedCity}
+        setSelectedCity={setSelectedCity}
       />}
 
       <div className='w-full flex items-center justify-between h-10'>
@@ -325,7 +358,11 @@ const AreaManagement = () => {
           </thead>
 
           <div className="bg-[#FFB27C] border-[1.5px] border-[#FFB27c] w-full p-4 py-2 absolute top-14 left-0">
-            <p className="text-orange-800 font-medium">Showing Drivers</p>
+            <p className='text-sm text-orange-800'>
+              <span className='font-semibold'>
+                Note:
+              </span>{" "}Click on a city name to explore areas within it.
+            </p>
           </div>
 
           <tbody className="mt-14">
@@ -342,40 +379,18 @@ const AreaManagement = () => {
                   {citiesList.map((item, index) => (
                     <span 
                       key={index}
-                      onClick={() => fetchAreas(item.city)} 
-                      className={`${item.state_id === id? "" : "hidden"} block`} 
+                      onClick={() => setSelectedCity(item.city)}
+                      className={`${item.state_id === area.id? "" : "hidden"} block capitalize cursor-pointer` } 
                     >
                       {item.city}
                     </span>
                   ))}
                 </td>
-
-                {/* <td className="px-4 py-4 text-left pl-14 text-orange-600 text-wrap">
-                  {areasList.map((item, index) => (
-                    <span className={`${item.state_id === id? "" : "hidden"}`} key={index}>{item.area}{index < citiesList.length - 1 ? ', ' : ''}</span>
-                  ))}
-                </td> */}
-{/* 
-                <td className="px-4 py-4 text-center">
-                  --
-                </td>
-
-                <td className="px-4 py-4 text-center">
-                  --
-                </td>
-
-                <td className="px-2 pr-4 py-4 text-orange-600 text-center">
-                 --
-                </td> */}
               </tr>
             ))}
           </tbody>
         </table>
         <div className='w-full flex items-center justify-center'>
-          {/* {majorCities.length > 3 && 
-          <button onClick={handleExpand} className='px-12 mt-4 rounded-full flex items-center justify-center py-1 text-orange-700 bg-[#FFB27C]'>
-              View {expanded? "less" : "all" }
-          </button>} */}
         </div>
       </div>
     </div>
