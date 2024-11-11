@@ -328,7 +328,7 @@ const AreaManagement = () => {
           <button 
             onClick={() => setAddNewArea(true)}
             className='px-10 rounded-full h-full flex items-center justify-center text-[#FF5C00] text-sm bg-[#FFE3CF] border-2 border-[#FFE3CF] hover:bg-transparent'>
-            Add New Location +
+            Add New State +
           </button>
           <button 
             onClick={() => setAddNewCity(true)}
