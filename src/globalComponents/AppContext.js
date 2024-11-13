@@ -81,11 +81,11 @@ export const UserProvider = ({ children }) => {
     }
   }
 
-    useEffect(() => {
-      fetchDrivers()
-      fetchFranchise()
-      fetchUsers()
-    }, [logged])
+  useEffect(() => {
+    fetchDrivers()
+    fetchFranchise()
+    fetchUsers()
+  }, [logged])
 
   useEffect(() => {
     if (userId) {
@@ -94,6 +94,11 @@ export const UserProvider = ({ children }) => {
   }, [userId])
 
   const fetchStateAndCity = () => {
+    if (!logged) {
+      return
+    }
+
+
     axiosInstance
       .get("all/states/")
       .then(res => {
@@ -113,7 +118,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     fetchStateAndCity()
-  }, [])
+  }, [logged])
 
   return (
     <AppContext.Provider
