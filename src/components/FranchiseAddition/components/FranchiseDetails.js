@@ -2,14 +2,14 @@ import { useUserContext } from 'globalComponents/AppContext';
 import React, { useEffect, useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
-import majorCities from 'globalComponents/data/majorCities';
 
 const FranchiseDetails = ({
     handleClose,
     driverDetails,
     setDriverDetails
 }) => {
-    const { setAlert } = useUserContext()
+    const { setAlert, citiesList } = useUserContext()
+    const [ areaList, setAreaList ] = useState([])
     const [ editable, setEditable ] = useState(false)
     const [ changedDetails, setChangedDetails ] = useState(driverDetails)
     const [ loader, setLoader ] = useState(false)
@@ -98,6 +98,21 @@ const FranchiseDetails = ({
         }
     }, [editable, driverDetails])
 
+    useEffect(() => {
+        if (changedDetails.city && changedDetails.city !== "") {
+          setLoader(true)
+    
+          axiosInstance
+          .get(`all/api/cities/${changedDetails.city}/areas`)
+          .then(res => {
+            setAreaList(res.data)
+            console.log(res)
+          })
+          .catch(err => console.error(err))
+          .finally(() => setLoader(false))
+        }
+      }, [changedDetails])
+
   return (
     <div className='p-5 relative w-[50vw] h-fit pb-10 rounded-2xl backdrop-blur-md bg-orange-500 bg-opacity-15 border-2 border-orange-600 border-opacity-50 shadow-2xl'>
         {/* close button */}
@@ -165,14 +180,6 @@ const FranchiseDetails = ({
             </div>
             <div className='w-1/2 flex flex-col px-2'>
                 <label className='text-sm text-orange-600 font-medium mb-1'>City: </label>
-                {/* <input
-                    type="text"
-                    disabled={!editable}
-                    className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
-                    name="city" 
-                    value={changedDetails.city || ''} 
-                    onChange={handleChange} 
-                /> */}
                 <select
                     value={changedDetails.city}
                     onChange={handleAreaChange}
@@ -180,30 +187,22 @@ const FranchiseDetails = ({
                     className='w-full h-10 rounded-full border-2 focus:outline-none border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4'
                 >
                     <option value="">Select City</option>
-                    {majorCities.filter(item => item.name === selectedCity)[0]?.area.map(city => (
-                        <option key={city} value={city}>{city}</option>
+                    {citiesList.map(city => (
+                        <option key={city.id} value={city.city}>{city.city}</option>
                     ))}
                 </select>
             </div>
             <div className='w-1/2 flex flex-col px-2'>
                 <label className='text-sm text-orange-600 font-medium mb-1'>Area: </label>
-                {/* <input
-                    type="text"
-                    disabled={!editable}
-                    className='w-full h-10 rounded-full border-2 border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4' 
-                    name="area" 
-                    value={changedDetails.area || ''} 
-                    onChange={handleChange} 
-                /> */}
                 <select
                     value={changedDetails.area}
                     onChange={handleCityChange}
-                    disabled={!editable}
+                    disabled={!editable || loader}
                     className='w-full h-10 rounded-full border-2 focus:outline-none border-orange-600 border-opacity-50 disabled:bg-opacity-50 disabled:text-opacity-70 px-4'
                 >
                     <option value="">Select Area</option>
-                    {majorCities.map(city => (
-                            <option key={city.name} value={city.name}>{city.name}</option>
+                    {areaList.map(city => (
+                            <option key={city.id} value={city.area}>{city.area}</option>
                     ))}
                 </select>
             </div>

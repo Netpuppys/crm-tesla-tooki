@@ -6,10 +6,9 @@ import "../../styles/components/DriverAddition/DriverAddition.css"
 import axiosInstance from 'utils/AxiosInstance';
 import { useUserContext } from 'globalComponents/AppContext';
 import { ThreeCircles, ThreeDots } from 'react-loader-spinner';
-import majorCities from 'globalComponents/data/majorCities';
 
 const DriverAddition = ({ setShowDriverAddition }) => {
-    const { setAlert, fetchDrivers } = useUserContext()
+    const { setAlert, vehicleTypes, fetchDrivers } = useUserContext()
     const location = useLocation()
     const [newAdmin, setNewAdmin] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
     const [ userList , setUserList ] = useState()
@@ -128,8 +127,14 @@ const DriverAddition = ({ setShowDriverAddition }) => {
           return false
         }
         return true;
-      };
-    
+    };
+
+    const handleVehicleTypeChange = (event) => {
+        setNewAdmin(prev => ({
+            ...prev,
+            vehicle_type: event.target.value,
+        }));
+    };
 
     const handleSubmit = () => {
         
@@ -177,7 +182,7 @@ const DriverAddition = ({ setShowDriverAddition }) => {
         formData.append('license_no', newAdmin.dL);
         formData.append('aadhaar_no', newAdmin.aadhar);
         formData.append('police_verification_letter', fileUploaded);
-        formData.append('vehicle_type', null);
+        formData.append('vehicle_type', newAdmin.vehicleType);
 
         setLoader(true)
         
@@ -204,7 +209,7 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                 errMessage.push(`${err.response.data.message}: `)
                 
                 for (let field in errors) {
-                    if (errors.hasOwnProperty(field) && field === "email" || field === "phone_number") {
+                    if (errors.hasOwnProperty(field) && (field === "email" || field === "phone_number")) {
                         allMessages.push(`${field}`);
                     }
                 }
@@ -330,6 +335,18 @@ const DriverAddition = ({ setShowDriverAddition }) => {
                         <option value="">Select Area</option>
                         {areaList.map(area => (
                             <option key={area.area} value={area.area}>{area.area}</option>
+                        ))}
+                    </select>
+
+                    <select
+                        value={newAdmin?.vehicle_type || ''}
+                        onChange={handleVehicleTypeChange}
+                        disabled={loader}
+                        className='community-input email-input'
+                    >
+                        <option value="">Select Vehicle Type</option>
+                        {vehicleTypes.map((vehicle, id) => (
+                                <option key={id} value={vehicle}>{vehicle}</option>
                         ))}
                     </select>
 

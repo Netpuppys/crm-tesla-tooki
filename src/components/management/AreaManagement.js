@@ -3,6 +3,7 @@ import AddNewArea from './components/AddNewArea'
 import axiosInstance from 'utils/AxiosInstance'
 import { ThreeDots } from 'react-loader-spinner'
 import { useUserContext } from 'globalComponents/AppContext'
+import { MdDelete } from 'react-icons/md'
 
 const AddNewCity = ({ stateList, setAddNewCity, fetchStateAndCity }) => {
   const { setAlert } = useUserContext()
@@ -210,6 +211,8 @@ const AddNewCityArea = ({ stateList, cityList, setAddNewCityArea, fetchStateAndC
 }
 
 const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
+  const { setAlert } = useUserContext()
+
   const [ areaList, setAreaList ] = useState([])
   const [ loader, setLoader ] = useState(false)
 
@@ -218,7 +221,7 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
       setLoader(true)
 
       axiosInstance
-      .get(`all/api/cities/${selectedCity}/areas`)
+      .get(`all/api/cities/${selectedCity.city}/areas`)
       .then(res => {
         setAreaList(res.data)
         console.log(res)
@@ -227,6 +230,19 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
       .finally(() => setLoader(false))
     }
   }, [selectedCity])
+
+  const handleDelete = () => {
+    if (selectedCity.id) {
+      axiosInstance
+      .delete(`all/cities/${selectedCity.id}`)
+      .then(res => {
+        console.log(res)
+        setAlert("Deleted Successfully")
+        setSelectedCity("")
+      })
+      .catch(err => console.error(err))
+    }
+  }
 
   return (
     <div className='w-screen h-screen flex items-center justify-center fixed top-0 left-0 backdrop-blur-sm z-[999]'>
@@ -237,8 +253,11 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
         >
           close
         </button>
+
+        <button className='text-lg absolute text-[#ea580c] top-2 left-2 opacity-70 hover:opacity-100' onClick={handleDelete}><MdDelete /></button>
+
         <p className='text-2xl supermercado font-bold text-[#ea580c]'>
-          {selectedCity}
+          {selectedCity.city}{" "}
         </p>
 
         {loader? 
@@ -259,34 +278,25 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
 }
 
 const AreaManagement = () => {
-  const [ stateList, setStateList ] = useState([])
+  const { stateList, citiesList, fetchStateAndCity, setAlert } = useUserContext()
+
   const [ addNewArea, setAddNewArea ] = useState(false)
-  const [ citiesList, setCitiesList ] = useState([])
   const [ addNewCity, setAddNewCity ] = useState(false)
   const [ addNewCityArea, setAddNewCityArea ] = useState(false)
   const [ selectedCity, setSelectedCity ] = useState("")
- 
-  const fetchStateAndCity = () => {
-    axiosInstance
-      .get("all/states/")
-      .then(res => {
-        setStateList(res.data)
-        console.log(res.data)
-      })
-      .catch((err) => console.error(err))
 
-    axiosInstance
-      .get("all/cities/")
+  const handleDelete = (id) => {
+    if (id) {
+      axiosInstance
+      .delete(`all/states/${id}`)
       .then(res => {
-        setCitiesList(res.data)
-        console.log(res.data)
+        console.log(res)
+        setAlert("Deleted Successfully")
+        fetchStateAndCity()
       })
-      .catch((err) => console.error(err))
+      .catch(err => console.error(err))
+    }
   }
-
-  useEffect(() => {
-    fetchStateAndCity()
-  }, [])
 
   return (
     <div className='w-full pt-5'>
@@ -349,6 +359,7 @@ const AreaManagement = () => {
             <tr className="bg-transparent border-[0.5px] border-[#FF7527] h-14 mb-14">
               <th className="text-left text-[#1F384C] text-sm px-4 pl-10 py-4">State</th>
               <th className="text-left pl-14 text-[#1F384C] text-sm px-4 py-4">Cities</th>
+              <th className="text-right pl-14 text-[#1F384C] text-sm px-4 py-4">Options</th>
               {/* <th className="text-left pl-14 text-[#1F384C] text-sm px-4 py-4">Areas</th> */}
               {/* <th className="text-center text-[#1F384C] text-sm px-4 py-4">Number of Franchises</th>
               <th className="text-center text-[#1F384C] text-sm px-4 pr-10 py-4">Number of Drivers</th>
@@ -374,17 +385,22 @@ const AreaManagement = () => {
                   {area?.state}
                 </td>
 
-
                 <td className="px-4 py-4 text-left pl-14 text-orange-600 text-wrap">
                   {citiesList.map((item, index) => (
                     <span 
                       key={index}
-                      onClick={() => setSelectedCity(item.city)}
+                      onClick={() => setSelectedCity({city: item.city, id: item.id})}
                       className={`${item.state_id === area.id? "" : "hidden"} block capitalize cursor-pointer` } 
                     >
                       {item.city}
                     </span>
                   ))}
+                </td>
+
+                <td className="flex items-center justify-end text-left px-4 py-4">
+                  <button className='opacity-50 text-lg hover:opacity-100' onClick={() => handleDelete(area.id)}>
+                    <MdDelete />
+                  </button>
                 </td>
               </tr>
             ))}

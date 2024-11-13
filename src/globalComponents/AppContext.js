@@ -9,12 +9,26 @@ export const UserProvider = ({ children }) => {
   const [ userId, setUserId ] = useState()
   const [ loggedIn, setLoggedIn ] = useState(false)
   const [ userData, setUserData ] = useState()
-
+  const [ stateList, setStateList ] = useState([])
+  const [ citiesList, setCitiesList ] = useState([])
   const [ driverList, setDriverList ] = useState()
   const [ franchiseList, setFranchiseList ] = useState()
   const [ userList, setUserList ] = useState()
   const [ alert, setAlert ] = useState()
 
+  const vehicleTypes = [
+    '2 wheeler 20kg',
+    '3 wheeler 500kg',
+    'Eeco 500kg',
+    'Pickup 8ft 1000kg',
+    'Tata Ace 750kg',
+    'Pickup 8ft 1250kg',
+    'Pickup 9ft 1700kg',
+    'Tata 407 2500kg',
+    'Pickup 14ft 3500kg',
+    'Canter 14ft 3500kg'
+  ];
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       console.log(alert)
@@ -79,6 +93,28 @@ export const UserProvider = ({ children }) => {
     }
   }, [userId])
 
+  const fetchStateAndCity = () => {
+    axiosInstance
+      .get("all/states/")
+      .then(res => {
+        setStateList(res.data)
+        console.log(res.data)
+      })
+      .catch((err) => console.error(err))
+
+    axiosInstance
+      .get("all/cities/")
+      .then(res => {
+        setCitiesList(res.data)
+        console.log(res.data)
+      })
+      .catch((err) => console.error(err))
+  }
+
+  useEffect(() => {
+    fetchStateAndCity()
+  }, [])
+
   return (
     <AppContext.Provider
       value={{
@@ -98,9 +134,13 @@ export const UserProvider = ({ children }) => {
         setUserList,
         alert,
         setAlert,
+        citiesList,
+        stateList,
+        vehicleTypes,
         fetchDrivers,
         fetchFranchise,
-        fetchUsers
+        fetchUsers,
+        fetchStateAndCity
       }}
     >
       {children}
