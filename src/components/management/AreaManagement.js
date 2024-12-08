@@ -5,6 +5,31 @@ import { ThreeDots } from 'react-loader-spinner'
 import { useUserContext } from 'globalComponents/AppContext'
 import { MdDelete } from 'react-icons/md'
 
+const DeletePopUp = ({ handleDelete, setShowDelete }) => {
+  return (
+    <div className='w-fit p-6 bg-white relative bg-opacity-90 z-[9999] px- rounded-xl shadow-3xl border-2 border-orange-600 flex flex-col items-center justify-center gap-5'>
+      <p className='text-2xl text-center font-bold'>
+        Are You Sure?
+      </p>
+
+      <div className='flex items-center justify-center mt-10 h-10 gap-4'>
+        <button
+          onClick={handleDelete}
+          className='w-28 h-full rounded-full flex items-center justify-center text-white text-lg font-medium bg-red-500'
+        >
+          Delete
+        </button>
+        <button
+          onClick={() => setShowDelete(false)}
+          className='w-28 h-full rounded-full border-2 border-slate-500 flex items-center justify-center text-slate-950 text-lg font-medium bg-white'
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const AddNewCity = ({ stateList, setAddNewCity, fetchStateAndCity }) => {
   const { setAlert } = useUserContext()
   const [ selectedState, setSelectedState ] = useState("")
@@ -216,6 +241,8 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
   const [ areaList, setAreaList ] = useState([])
   const [ loader, setLoader ] = useState(false)
 
+  const [ showDelete, setShowDelete ] = useState(false)
+
   useEffect(() => {
     if (selectedCity && selectedCity !== "") {
       setLoader(true)
@@ -234,9 +261,21 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
   const handleDelete = () => {
     if (selectedCity.id) {
       axiosInstance
-      .delete(`all/cities/${selectedCity.id}`)
+      .delete(`all/cities/delete/${selectedCity.id}`)
       .then(res => {
         console.log(res)
+        setAlert("Deleted Successfully")
+        setSelectedCity("")
+      })
+      .catch(err => console.error(err))
+    }
+  }
+
+  const handleAreaDelete = (areaId) => {
+    if (areaId) {
+      axiosInstance
+      .delete(`all/areas/delete/${areaId}`)
+      .then(res => {
         setAlert("Deleted Successfully")
         setSelectedCity("")
       })
@@ -254,7 +293,22 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
           close
         </button>
 
-        <button className='text-lg absolute text-[#ea580c] top-2 left-2 opacity-70 hover:opacity-100' onClick={handleDelete}><MdDelete /></button>
+        <button 
+          className='text-lg absolute text-[#ea580c] top-2 left-2 opacity-70 hover:opacity-100' 
+          onClick={() => {
+            setShowDelete(true)
+          }}
+        >
+          <MdDelete />
+        </button>
+
+      {showDelete &&
+      <div className='w-screen h-screen z-[999] backdrop-blur-sm fixed top-0 left-0 flex items-center justify-center p-8 '>
+        <DeletePopUp 
+          handleDelete={handleDelete}
+          setShowDelete={setShowDelete}
+        />
+      </div>}
 
         <p className='text-2xl supermercado font-bold text-[#ea580c]'>
           {selectedCity.city}{" "}
@@ -262,16 +316,26 @@ const AreaUnderCity = ({ selectedCity, setSelectedCity }) => {
 
         {loader? 
         <ThreeDots color='#f97316' /> :
-        <ul className='w-full'>
+        <div className='w-full'>
           {(areaList && areaList.length>0)? 
           areaList.map((item, index) => (
-            <li key={index} className='capitalize text-lg mb-2'>{item.area}</li>
+            <div key={index} className='w-full mb-2 border-b last:border-b-0 border-orange-600 h-10 flex items-center justify-between'>
+              <p className='capitalize text-lg'>
+                {item.area}
+              </p>
+              <button 
+                className='text-lg text-[#ea580c] opacity-70 hover:opacity-100' 
+                onClick={() => handleAreaDelete(item.id)}
+              >
+                <MdDelete />
+              </button>
+            </div>
           )) :
           <p className='text-xl text-center font-semibold text-black text-opacity-70'>
             No Area's Found
           </p>
           }
-        </ul>}
+        </div>}
       </div>
     </div>
   )
@@ -284,17 +348,21 @@ const AreaManagement = () => {
   const [ addNewCity, setAddNewCity ] = useState(false)
   const [ addNewCityArea, setAddNewCityArea ] = useState(false)
   const [ selectedCity, setSelectedCity ] = useState("")
+  const [ showDelete, setShowDelete ] = useState(false)
+  const [ deleteId, setDeleteId ] = useState()
 
-  const handleDelete = (id) => {
-    if (id) {
+  const handleDelete = () => {
+    if (deleteId) {
       axiosInstance
-      .delete(`all/states/${id}`)
+      .delete(`all/states/delete/${deleteId}`)
       .then(res => {
-        console.log(res)
         setAlert("Deleted Successfully")
+        setShowDelete(false)
         fetchStateAndCity()
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        setAlert("something went wrong")
+      })
     }
   }
 
@@ -306,6 +374,14 @@ const AreaManagement = () => {
         <AddNewArea 
           setAddNewArea={setAddNewArea}
           fetchStateAndCity={fetchStateAndCity}
+        />
+      </div>}
+
+      {showDelete &&
+      <div className='w-screen h-screen z-[999] backdrop-blur-sm fixed top-0 left-0 flex items-center justify-center p-8 '>
+        <DeletePopUp 
+          handleDelete={handleDelete}
+          setShowDelete={setShowDelete}
         />
       </div>}
 
@@ -398,7 +474,13 @@ const AreaManagement = () => {
                 </td>
 
                 <td className="flex items-center justify-end text-left px-4 py-4">
-                  <button className='opacity-50 text-lg hover:opacity-100' onClick={() => handleDelete(area.id)}>
+                  <button 
+                    className='opacity-50 text-lg hover:opacity-100' 
+                    onClick={() => {
+                      setShowDelete(true)
+                      setDeleteId(area.id)
+                    }}
+                  >
                     <MdDelete />
                   </button>
                 </td>

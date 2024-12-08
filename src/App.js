@@ -20,6 +20,7 @@ import DriverListPage from 'pages/DriverListPage';
 import DriverAdditionPage from 'pages/DriverAdditionPage';
 import UserSearchWindow from 'components/userSearchWindow/UserSearchWindow';
 import ManagementPage from 'pages/ManagementPage';
+import Communities from 'components/Communities/Communities';
 
 const LogOutButton = () => {
   const navigate = useNavigate()
@@ -92,6 +93,7 @@ function App() {
                   <Route path='/admin-management' element={<AdminManagementPage />} /> 
                   <Route path='/admin-management/create' element={<CreateNewAdmin />} /> 
                   <Route path='/communities' element={<CommunitiesPage />} /> 
+                  <Route path='/add-community' element={<Communities />} /> 
                   <Route path='/franchise-addition' element={<FranchiseAdditionPage />} /> 
                   <Route path='management' element={<ManagementPage />} />
                   <Route path='/search' element={<UserSearchWindow />} />

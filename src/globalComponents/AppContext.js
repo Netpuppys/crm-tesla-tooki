@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
   const [ citiesList, setCitiesList ] = useState([])
   const [ driverList, setDriverList ] = useState()
   const [ franchiseList, setFranchiseList ] = useState()
+  const [ communitiesList, setCommunitiesList ] = useState()
   const [ userList, setUserList ] = useState()
   const [ alert, setAlert ] = useState()
 
@@ -81,10 +82,25 @@ export const UserProvider = ({ children }) => {
     }
   }
 
+  const fetchCommunities = () => {
+    if (logged) {
+      axiosInstance
+        .get("all/labourcommunity/")
+        .then(res => {
+            setCommunitiesList(res.data)
+            console.log(res.data)
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }
+  }
+
   useEffect(() => {
     fetchDrivers()
     fetchFranchise()
     fetchUsers()
+    fetchCommunities()
   }, [logged])
 
   useEffect(() => {
@@ -135,6 +151,7 @@ export const UserProvider = ({ children }) => {
         setDriverList,
         franchiseList,
         setFranchiseList,
+        communitiesList,
         userList,
         setUserList,
         alert,
@@ -145,6 +162,7 @@ export const UserProvider = ({ children }) => {
         fetchDrivers,
         fetchFranchise,
         fetchUsers,
+        fetchCommunities,
         fetchStateAndCity
       }}
     >

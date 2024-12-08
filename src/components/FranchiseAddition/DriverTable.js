@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { Circles, ThreeCircles, ThreeDots } from 'react-loader-spinner';
+import { ThreeCircles, ThreeDots } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import DriverDetails from './components/DriverDetails';
@@ -8,9 +8,33 @@ import { useUserContext } from 'globalComponents/AppContext';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
-const TransactionHistory = ({ setShowTransactions }) => {
+const TransactionHistory = ({ showTransactions, setShowTransactions }) => {
+  const [ transactions, setTransactions ] = useState()
+  const [ loader, setLoader ] = useState(true)
+
+  useEffect(() => {
+    if (showTransactions) {
+      setLoader(true)
+      axiosInstance
+        .get(`all/data/alltransactions/${showTransactions}/`)
+        .then(res => {
+          setTransactions(res.data.msg)
+        })
+        .catch(err => {
+          console.error(err)
+          if (err?.response?.data?.error === "No transactions found for this driver") {
+            setTransactions("none")
+            return
+          }
+        })
+        .finally(() => {
+          setLoader(false)
+        })
+    }
+  }, [showTransactions])
+
   return (
-    <div className='w-full bg-white z-50 max-w-[30rem] min-h-[20rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
+    <div className='w-full bg-white z-50 max-w-[30rem] h-fit min-h-[16rem] p-6 flex items-center justify-start flex-col rounded-3xl shadow-2xl relative'>
       <button
         onClick={() => setShowTransactions(false)}
         className='w-10 aspect-square absolute top-3 right-3 rounded-full flex items-center justify-center text-2xl bg-black bg-opacity-20 text-black'
@@ -18,8 +42,34 @@ const TransactionHistory = ({ setShowTransactions }) => {
         <IoClose />
       </button>
       <p className='text-3xl supermercado'>
-        No Transactions Found
+        All Transactions
       </p>
+
+      {loader &&
+      <div className='w-full h-full flex items-center justify-center'>
+        <ThreeCircles
+          color='#FFB27C'
+          width={50}
+        />
+      </div>}
+
+      {!loader && 
+      (transactions !== "none"?
+      <div className='w-full flex h-full mt-10 gap-6'>
+        <div className='w-1/2 h-full flex flex-col items-center justify-start gap-5 pt-4 rounded-3xl bg-green-500 aspect-video'>
+          <p className='text-white text-xl font-medium'>Points by Driver</p>
+          <p className='text-white text-3xl font-bold'>
+            ₹{transactions?.phonepeamount}
+          </p>
+        </div>
+        <div className='w-1/2 h-full flex flex-col items-center justify-start gap-5 pt-4 rounded-3xl bg-red-500 aspect-video'>
+          <p className='text-white text-xl font-medium'>Points by Company</p>
+          <p className='text-white text-3xl font-bold'>
+            ₹{transactions?.companyamount}
+          </p>
+        </div>
+      </div> : <p className='text-2xl text-center pt-10'>No Transactions Found</p>)}
+
     </div>
   )
 }
@@ -358,7 +408,8 @@ const DriverList = ({ driverList, area }) => {
 
       {showTransactions &&
       <div className='w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-10 fixed top-0 left-0'>
-        <TransactionHistory 
+        <TransactionHistory
+          showTransactions={showTransactions}
           setShowTransactions={setShowTransactions}
         />
       </div>}
@@ -436,7 +487,7 @@ const DriverList = ({ driverList, area }) => {
                 {/* show transactions */}
                 <td className="px-4 py-4 text-center">
                   <button 
-                    onClick={() => setShowTransactions(true)}
+                    onClick={() => setShowTransactions(driver.id)}
                     className="bg-orange-100 mx-auto text-orange-600 px-6 py-1 text-xs rounded-full flex items-center gap-2 hover:bg-orange-200"
                   >
                     <span>View Previous Transactions</span>

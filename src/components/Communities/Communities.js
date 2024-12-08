@@ -1,32 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import RedButton from 'globalComponents/ui/RedButton';
 import "../../styles/components/Communities/Communities.css"
+import axiosInstance from 'utils/AxiosInstance';
+import { useUserContext } from 'globalComponents/AppContext';
+import { IoClose } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 
 const communities = [
-    "Konoha Village - Naruto",
-    "Soul Society - Bleach",
-    "Gensokyo - Touhou Project",
-    "Survey Corps - Attack on Titan",
-    "Luffy's Crew - One Piece",
-    "Hinamizawa Village - Higurashi: When They Cry",
-    "SOS Brigade - The Melancholy of Haruhi Suzumiya",
-    "Class 1-A - My Hero Academia",
-    "Fairy Tail Guild - Fairy Tail",
-    "Seven Deadly Sins - The Seven Deadly Sins",
-    "Berserk Band of the Hawk - Berserk",
-    "Shibusen - Soul Eater",
-    "Whitebeard Pirates - One Piece",
-    "Team Rocket - Pokémon",
-    "Blaze Brigade - Fire Force"
+    "Community A",
+    "Community B",
+    "Community C",
+    "Community D",
+    "Community E",
 ];
 
 const Communities = () => {
-    const [newCommunityData, setNewCommunityData] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
-    const [selectedCommunity, setSelectedCommunity] = useState("");
+    const { vehicleTypes, setAlert, fetchCommunities } = useUserContext()
 
-    useEffect(() => {
-        console.log(newCommunityData);
-    }, [newCommunityData]);
+    const [newCommunityData, setNewCommunityData] = useState({ firstName: "", lastName: "", mobile: "" });
 
     const handleInputChange = (value, keyName) => {
         setNewCommunityData(prev => ({
@@ -35,22 +26,51 @@ const Communities = () => {
         }));
     };
 
-    const handleSelectChange = (event) => {
-        setSelectedCommunity(event.target.value);
-    };
-
     const handleSubmit = () => {
-        if (selectedCommunity) {
-            console.log(selectedCommunity)
-        } else if (!selectedCommunity && newCommunityData) {
-            console.log(newCommunityData)
+        const { firstName, lastName, mobile, community, vehicleType } = newCommunityData;
+
+        // Validation
+        if (!firstName.trim()) return setAlert("First name is required.");
+        if (!lastName.trim()) return setAlert("Last name is required.");
+        if (!community) return setAlert("Please select a community.");
+        if (!vehicleType) return setAlert("Please select a vehicle type.");
+        if (!/^\d{10}$/.test(mobile)) return setAlert("Please enter a valid 10-digit mobile number.");
+
+        const data = {
+            firstname: firstName,
+            lastname: lastName,
+            mobile_number: mobile,
+            vehicle_type: vehicleType,
+            community: community
         }
+
+        axiosInstance
+            .post("all/labourcommunity/", data)
+            .then(res => {
+                console.log(res)
+                fetchCommunities()
+                setAlert("Community Created")
+            })
+            .catch(err => {
+                console.error(err)
+                setAlert("Something went wrong")
+            })
     }
 
     return (
-        <div className='communities-main-div'>
+        <div className='communities-main-div relative'>
             <p className='page-title'>Communities</p>
             <p className='sub-title'>Create New Community</p>
+
+            <Link
+                to={"/communities"}
+                className='rounded-full border text-[#FF5C00] px-5 h-10 font-semibold border-[#FFB27C] text-sm absolute top-10 right-10 flex items-center justify-center gap-1'
+            >
+                Close 
+                <span className='text-lg'>
+                    <IoClose />
+                </span>
+            </Link>
 
             <div className='communities-inputs-container'>
                 <div className='new-community-form'>
@@ -68,32 +88,10 @@ const Communities = () => {
                         value={newCommunityData.lastName}
                         onChange={e => handleInputChange(e.target.value, "lastName")}
                     />
-                    <input
-                        type='email'
-                        placeholder='Email ID'
-                        className='community-input email-input'
-                        value={newCommunityData.email}
-                        onChange={e => handleInputChange(e.target.value, "email")}
-                    />
-                    <input
-                        type='number'
-                        placeholder='Mobile Number'
-                        className='community-input'
-                        value={newCommunityData.mobile}
-                        onChange={e => handleInputChange(e.target.value, "mobile")}
-                    />
-                </div>
-
-                <div className='or-divider'>
-                    <div className='divider'></div>
-                    <p className='or-text'>OR</p>
-                    <div className='divider'></div>
-                </div>
-
-                <div className='select-community-div'>
                     <select 
-                        value={selectedCommunity} 
-                        onChange={handleSelectChange}
+                        className='community-input min-w-full'
+                        value={newCommunityData.community}
+                        onChange={e => handleInputChange(e.target.value, "community")}
                     >
                         <option value="">Select a community</option>
                         {communities.map((community, index) => (
@@ -102,6 +100,28 @@ const Communities = () => {
                                 value={community}
                             >
                                 {community}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type='tel'
+                        placeholder='Mobile Number'
+                        className='community-input'
+                        value={newCommunityData.mobile}
+                        onChange={e => handleInputChange(e.target.value, "mobile")}
+                    />
+                    <select
+                        className='community-input'
+                        value={newCommunityData.vehicleType}
+                        onChange={e => handleInputChange(e.target.value, "vehicleType")}
+                    >
+                        <option value="">Select Vehicle Type</option>
+                        {vehicleTypes.map((item, id) => (
+                            <option
+                                value={item}
+                                key={id}
+                            >
+                                {item}
                             </option>
                         ))}
                     </select>
