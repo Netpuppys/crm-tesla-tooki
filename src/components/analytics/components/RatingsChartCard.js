@@ -1,5 +1,4 @@
 import React from 'react'
-import deleteImg from "../../../assets/delete/ratingChart.png"
 import "../../../styles/components/analytics/components/RatingsChartCard.css"
 import { useUserContext } from 'globalComponents/AppContext'
 import { useNavigate } from 'react-router-dom'
@@ -23,7 +22,7 @@ const RatingsChartCard = () => {
         </p>
 
         {data.map((item, index) => (
-        <div className='w-full mt-5 rounded-xl py-2 border-l-2 border-r-2 border-orange-600 shadow-2xl mb-4 backdrop-blur-md bg-opacity-10 flex items-center justify-between px-5'>
+        <div key={index} className='w-full mt-5 rounded-xl py-2 border-l-2 border-r-2 border-orange-600 shadow-2xl mb-4 backdrop-blur-md bg-opacity-10 flex items-center justify-between px-5'>
             <p className='text-orange-600 font-semibold '>
                 {item.title}:
             </p>

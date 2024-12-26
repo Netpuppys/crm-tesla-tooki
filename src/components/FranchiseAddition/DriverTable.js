@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { ThreeCircles, ThreeDots } from 'react-loader-spinner';
 import axiosInstance from 'utils/AxiosInstance';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import DriverDetails from './components/DriverDetails';
 import { useUserContext } from 'globalComponents/AppContext';
+import { useLocation } from 'react-router-dom';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
@@ -275,6 +276,11 @@ const TripHistory = ({ data }) => {
 }
 
 const DriverList = ({ driverList, area }) => {
+  const driverRefs = useRef({}); 
+
+  const location = useLocation()
+  const searchDriverData = location.state?.userData;
+
   const [ newDriverList, setNewDriverList ] = useState(driverList)
   const [ showTransactions, setShowTransactions ] = useState(false)
   const [ showTripHistory, setShowTripHistory ] = useState(false)
@@ -286,6 +292,20 @@ const DriverList = ({ driverList, area }) => {
   const [ showDetails, setShowDetails ] = useState(false)
   const [ driverDetails, setDriverDetails ] = useState()
   const [ deleteId, setDeleteId ] = useState(null)
+
+  const handleSearchClick = (id) => {
+    // Scroll to the specific driver in the list
+    const targetRef = driverRefs.current[id];
+    if (targetRef) {
+      targetRef.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  useEffect(() => {
+    if (searchDriverData) {
+      handleSearchClick(searchDriverData.id)
+    }
+  }, [searchDriverData])
 
   const fetchTripHistory = (id) => {
     setLoader(true)
@@ -454,7 +474,11 @@ const DriverList = ({ driverList, area }) => {
 
           <tbody className="mt-14">
             {newDriverList.map((driver) => (
-              <tr key={driver.id} className="text-sm border-b-[1px] border-[#C7CBD9]">
+              <tr 
+                key={driver.id}
+                ref={(el) => (driverRefs.current[driver.id] = el)} 
+                className={`text-sm border-b-[1px] border-[#C7CBD9] ${searchDriverData?.id === driver?.id? "bg-[#FFB27C] bg-opacity-15" : ""}`}
+              >
 
                 {/* driver name */}
                 <td className="flex items-center text-left px-4 py-4">

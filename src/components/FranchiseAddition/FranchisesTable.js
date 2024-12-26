@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import axiosInstance from 'utils/AxiosInstance';
 import FranchiseDetails from './components/FranchiseDetails';
 import { ThreeCircles } from 'react-loader-spinner';
 import PartnerDetails from './components/PartnerDetails';
 import DeletePopUp from './components/DeletePopUp';
+import { useLocation } from 'react-router-dom';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
 
 const FranchiseTable = ({ franchiseList, area }) => {
+  const franchiseRefs = useRef({}); 
+
+  const location = useLocation()
+  const searchFranchiseData = location.state?.userData;
+
   const [ newfranchiseList, setNewfranchiseList ] = useState(franchiseList)
   const [ partnersDetails, setPartnersDetails ] = useState(null)
   const [ franchiseId, setFranchiseId ] = useState()
@@ -16,6 +22,20 @@ const FranchiseTable = ({ franchiseList, area }) => {
   const [ franchiseDetails, setFranchiseDetails ] = useState()
   const [ deleteId, setDeleteId ] = useState(null)
   const [ loader, setLoader ] = useState(false)
+
+  const handleSearchClick = (id) => {
+    // Scroll to the specific driver in the list
+    const targetRef = franchiseRefs.current[id];
+    if (targetRef) {
+      targetRef.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  useEffect(() => {
+    if (searchFranchiseData) {
+      handleSearchClick(searchFranchiseData.id)
+    }
+  }, [searchFranchiseData])
 
   useEffect(() => {
     if (area) {
@@ -120,7 +140,11 @@ const FranchiseTable = ({ franchiseList, area }) => {
 
           <tbody className="mt-14">
             {newfranchiseList.map((driver) => (
-              <tr key={driver.id} className="text-sm border-b-[1px] border-[#C7CBD9]">
+              <tr 
+                key={driver.id}
+                ref={(el) => (franchiseRefs.current[driver.id] = el)} 
+                className={`text-sm border-b-[1px] border-[#C7CBD9] ${searchFranchiseData?.id === driver?.id? "bg-[#FFB27C] bg-opacity-15" : ""}`}
+              >
                 <td className="flex items-center px-4 py-4">
                   <img
                     src={driver.profile_photo || defaultProfilePhoto} // Assuming a default profile image

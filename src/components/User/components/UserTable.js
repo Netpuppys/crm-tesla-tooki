@@ -1,9 +1,10 @@
 import UserDetails from 'components/FranchiseAddition/components/UserDetails';
 import { useUserContext } from 'globalComponents/AppContext';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
 import { ThreeCircles } from 'react-loader-spinner';
+import { useLocation } from 'react-router-dom';
 import axiosInstance from 'utils/AxiosInstance';
 
 const defaultProfilePhoto = "https://via.placeholder.com/150"
@@ -83,12 +84,31 @@ const DeletePopUp = ({ deleteId, setDeleteId }) => {
 }
 
 const UserTable = ({ driverList, area }) => {
+  const userRefs = useRef({}); 
+
+  const location = useLocation()
+  const searchUserData = location.state?.userData;
+
   const [ newDriverList, setNewDriverList ] = useState(driverList)
   const [ showTransactions, setShowTransactions ] = useState(false)
   const [ deleteId, setDeleteId ] = useState(null)
   const [ userDetails, setUserDetails ] = useState()
   const [ showDetails, setShowDetails ] = useState(false)
   const [ loader, setLoader ] = useState(false)
+
+  const handleSearchClick = (id) => {
+    // Scroll to the specific driver in the list
+    const targetRef = userRefs.current[id];
+    if (targetRef) {
+      targetRef.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  useEffect(() => {
+    if (searchUserData) {
+      handleSearchClick(searchUserData.id)
+    }
+  }, [searchUserData])
 
   useEffect(() => {
     if (area) {
@@ -182,7 +202,11 @@ const UserTable = ({ driverList, area }) => {
 
           <tbody className="mt-14">
             {newDriverList.map((driver) => (
-              <tr key={driver.id} className="text-sm border-b-[1px] text-center border-[#C7CBD9]">
+              <tr 
+                key={driver.id} 
+                ref={(el) => (userRefs.current[driver.id] = el)}
+                className={`text-sm border-b-[1px] border-[#C7CBD9] ${searchUserData?.id === driver?.id? "bg-[#FFB27C] bg-opacity-15" : ""}`}
+              >
                 {/* name */}
                 <td className="flex items-start text-left px-4 py-4">
                   <img
