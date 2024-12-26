@@ -88,7 +88,6 @@ export const UserProvider = ({ children }) => {
         .get("all/labourcommunity/")
         .then(res => {
             setCommunitiesList(res.data)
-            console.log(res.data)
         })
         .catch(err => {
             console.error(err)
@@ -119,7 +118,6 @@ export const UserProvider = ({ children }) => {
       .get("all/states/")
       .then(res => {
         setStateList(res.data)
-        console.log(res.data)
       })
       .catch((err) => console.error(err))
 
@@ -127,7 +125,6 @@ export const UserProvider = ({ children }) => {
       .get("all/cities/")
       .then(res => {
         setCitiesList(res.data)
-        console.log(res.data)
       })
       .catch((err) => console.error(err))
   }

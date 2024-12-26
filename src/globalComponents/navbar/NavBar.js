@@ -21,15 +21,15 @@ const NavBar = ({ userData }) => {
             const searchTerm = searchInput.toLowerCase();
     
             const filterBySearchTerm = (list) =>
-                list.filter(item =>
-                    item.first_name?.toLowerCase().startsWith(searchTerm) ||
-                    item.email?.toLowerCase().includes(searchTerm) ||
-                    item.phone_number?.toLowerCase().includes(searchTerm)
+                list?.filter(item =>
+                    item?.first_name?.toLowerCase().startsWith(searchTerm) ||
+                    item?.email?.toLowerCase().includes(searchTerm) ||
+                    item?.phone_number?.toLowerCase().includes(searchTerm)
                 );
     
-            const filteredUsers = filterBySearchTerm(userList);
-            const filteredDrivers = filterBySearchTerm(driverList);
-            const filteredFranchises = filterBySearchTerm(franchiseList);
+            const filteredUsers = userList && userList.length>0 && filterBySearchTerm(userList) || [];
+            const filteredDrivers = driverList && driverList.length>0 && filterBySearchTerm(driverList) || [];
+            const filteredFranchises = franchiseList && franchiseList.length>0 && filterBySearchTerm(franchiseList) || [];
     
             const items = [...filteredUsers, ...filteredDrivers, ...filteredFranchises];
     
