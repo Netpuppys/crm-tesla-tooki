@@ -108,6 +108,10 @@ export const UserProvider = ({ children }) => {
     }
   }, [userId])
 
+  function sortCitiesAlphabetically(data) {
+    return data.sort((a, b) => a.city.localeCompare(b.city));
+  }
+
   const fetchStateAndCity = () => {
     if (!logged) {
       return
@@ -124,7 +128,8 @@ export const UserProvider = ({ children }) => {
     axiosInstance
       .get("all/cities/")
       .then(res => {
-        setCitiesList(res.data)
+        const cityList = sortCitiesAlphabetically(res.data)
+        setCitiesList(cityList)
       })
       .catch((err) => console.error(err))
   }
